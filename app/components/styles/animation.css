@@ -1,0 +1,23 @@
+/* animation.css */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.urban-block {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* app/(routes)/blog/styles.css */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.group:hover .arrow-icon {
+  animation: float 1.5s ease-in-out infinite;
+}

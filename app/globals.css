@@ -1,26 +1,21 @@
-@import "tailwindcss";
+/* /Desktop/urbanproject/app/globals.css */
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  @apply bg-brand-dark text-white font-sans;
+}
+
+.section {
+  @apply w-full max-w-6xl mx-auto px-4 py-16;
+}
+
+.section-title {
+  @apply text-xs tracking-[0.3em] uppercase text-gray-400 mb-2;
+}
+
+.section-heading {
+  @apply text-2xl md:text-3xl font-display font-semibold mb-6;
 }
