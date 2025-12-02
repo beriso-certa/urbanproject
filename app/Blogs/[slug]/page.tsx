@@ -1,4 +1,4 @@
-import { getSingleBlog } from "@/components/lib/sanity.fetch";
+import { getSingleBlog } from '@/app/components/lib/sanity.fetch'
 import Image from "next/image";
 
 export default async function BlogDetails({
