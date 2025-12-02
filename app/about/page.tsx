@@ -5,6 +5,12 @@ import Image from 'next/image';
 import Footer from '@/app/components/layout/Footer';
 import Header from '@/app/components/Header';
 
+// Default header data
+const defaultHeaderData = {
+  logo: "/images/logo.png",
+  menu: ["Work", "Services", "About", "Blog", "Contact"],
+  cta: "Get in touch"
+};
 
 const AboutPage = () => {
   const heroRef = useRef(null);
@@ -64,7 +70,7 @@ const AboutPage = () => {
 
   return (
     <div className="bg-[#1a1f2e] text-white min-h-screen">
-      <Header />
+      <Header data={defaultHeaderData} />
       {/* Hero Section */}
       <section 
         ref={heroRef}
@@ -194,7 +200,9 @@ const AboutPage = () => {
               {sanityData.culture.images.slice(0, 2).map((img, index) => (
                 <div
                   key={index}
-                  ref={el => imagesRef.current[index] = el}
+                  ref={(el: HTMLDivElement | null) => {
+                    if (el) imagesRef.current[index] = el;
+                  }}
                   className={`fade-in opacity-0 translate-y-8 transition-all duration-1000 hover:scale-110 hover:z-10 hover:rotate-0 ${
                     index === 0 ? 'rotate-[-8deg]' : 'rotate-[5deg]'
                   }`}
@@ -220,7 +228,9 @@ const AboutPage = () => {
               {sanityData.culture.images.slice(2, 4).map((img, index) => (
                 <div
                   key={index + 2}
-                  ref={el => imagesRef.current[index + 2] = el}
+                  ref={(el: HTMLDivElement | null) => {
+                    if (el) imagesRef.current[index + 2] = el;
+                  }}
                   className={`fade-in opacity-0 translate-y-8 transition-all duration-1000 hover:scale-110 hover:z-10 hover:rotate-0 ${
                     index === 0 ? 'rotate-[6deg]' : 'rotate-[-7deg]'
                   }`}
@@ -245,7 +255,9 @@ const AboutPage = () => {
             {sanityData.culture.images[4] && (
               <div className="-mt-4">
                 <div
-                  ref={el => imagesRef.current[4] = el}
+                  ref={(el: HTMLDivElement | null) => {
+                    if (el) imagesRef.current[4] = el;
+                  }}
                   className="fade-in opacity-0 translate-y-8 transition-all duration-1000 hover:scale-110 hover:z-10 hover:rotate-0 rotate-[-4deg]"
                   style={{ transitionDelay: '600ms' }}
                 >

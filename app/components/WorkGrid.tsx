@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
 // Mock Sanity data - replace with actual Sanity fetch
-interface WorkItem {
+export interface WorkItem {
   _id: string;
   title: string;
   slug: string;
@@ -26,8 +26,12 @@ const mockWorks: WorkItem[] = [
   { _id: '8', title: 'DANKIRA', slug: 'dankira-4', category: 'tv-commercial', mainImage: '/images/service03.png', featured: true },
 ];
 
-export default function OurWorkSection() {
-  const [displayedWorks, setDisplayedWorks] = useState<WorkItem[]>([]);
+interface OurWorkSectionProps {
+  works: WorkItem[];
+}
+
+export default function OurWorkSection({ works: initialWorks }: OurWorkSectionProps) {
+  const [displayedWorks, setDisplayedWorks] = useState<WorkItem[]>(initialWorks || []);
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);

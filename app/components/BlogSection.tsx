@@ -39,12 +39,19 @@ const blogPosts = [
   }
 ];
 
-const BlogCard = ({ post, index }) => {
-  const cardRef = useRef(null);
+const BlogCard = ({ post, index }: { post: BlogPost; index: number }) => {
+  const cardRef = useRef<HTMLDivElement | null>(null);
   const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     const card = cardRef.current;
+    
+    if (!card) return;
+
+    // Initial styles
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(50px)';
+    card.style.transition = `all 0.8s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.1}s`;
     
     // Scroll animation
     const observer = new IntersectionObserver(
@@ -59,14 +66,14 @@ const BlogCard = ({ post, index }) => {
       { threshold: 0.1 }
     );
 
-    if (card) {
-      card.style.opacity = '0';
-      card.style.transform = 'translateY(50px)';
-      card.style.transition = `all 0.8s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.1}s`;
-      observer.observe(card);
-    }
+    observer.observe(card);
 
-    return () => observer.disconnect();
+    return () => {
+      if (card) {
+        observer.unobserve(card);
+        observer.disconnect();
+      }
+    };
   }, [index]);
 
   return (
@@ -130,7 +137,7 @@ interface BlogsSectionProps {
 
 const BlogsSection = ({ data }: BlogsSectionProps) => {
   const sectionRef = useRef(null);
-  const titleRef = useRef(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
     const title = titleRef.current;
@@ -139,7 +146,7 @@ const BlogsSection = ({ data }: BlogsSectionProps) => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting && title) {
             title.style.opacity = '1';
             title.style.transform = 'translateX(0)';
           }

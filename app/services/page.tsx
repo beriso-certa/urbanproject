@@ -122,7 +122,13 @@ export default function ServicesPage() {
 
   return (
     <div ref={sectionRef} className="min-h-screen bg-[#0a0f1c] text-white">
-      <Header />
+      <Header 
+        data={{
+          logo: '/images/logos.png',
+          menu: ['HOME', 'WORK', 'SERVICES', 'ABOUT US', 'BLOGS'],
+          cta: 'CONTACT US'
+        }} 
+      />
 
       <div className="container mx-auto px-4 py-20">
 

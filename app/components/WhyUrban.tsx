@@ -60,22 +60,24 @@ const WhyUrban = ({
     );
 
     // Buttons animation
-    gsap.fromTo(
-      buttonsRef.current?.children,
-      { x: 50, opacity: 0 },
-      {
-        x: 0,
-        opacity: 1,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 70%",
-          toggleActions: "play none none none"
+    if (buttonsRef.current) {
+      gsap.fromTo(
+        buttonsRef.current.children,
+        { x: 50, opacity: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 70%",
+            toggleActions: "play none none none"
+          }
         }
-      }
-    );
+      );
+    }
 
     // Person image animation
     if (personRef.current) {

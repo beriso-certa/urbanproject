@@ -1,9 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { LatLngExpression } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 // Simulated GSAP animation hook
-const useGSAPAnimation = (ref, animationConfig) => {
+interface AnimationConfig {
+  duration?: number;
+  delay?: number;
+  // Add other animation config properties as needed
+}
+
+const useGSAPAnimation = <T extends HTMLElement>(
+  ref: React.RefObject<T | null>,
+  animationConfig?: AnimationConfig
+) => {
   useEffect(() => {
     if (!ref.current) return;
     
@@ -33,9 +43,9 @@ const ContactSection = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const heroRef = useRef(null);
-  const formRef = useRef(null);
-  const mapRef = useRef(null);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const mapRef = useRef<HTMLDivElement>(null);
 
   useGSAPAnimation(heroRef);
   useGSAPAnimation(formRef);
@@ -54,7 +64,7 @@ const ContactSection = () => {
     setIsSubmitting(false);
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
@@ -62,7 +72,7 @@ const ContactSection = () => {
   };
 
   // Addis Ababa coordinates
-  const position = [9.0320, 38.7469];
+  const position: LatLngExpression = [9.0320, 38.7469];
 
   return (
     <div className="bg-[#0a0a0a] text-white">
@@ -110,14 +120,13 @@ const ContactSection = () => {
       </div>
 
       {/* Contact Form Section */}
-      <div 
-        ref={formRef}
-        className="max-w-7xl mx-auto px-4 py-20 opacity-0 transition-all duration-1000"
-        style={{ transform: 'translateY(50px)' }}
-      >
+      <div className="max-w-7xl mx-auto px-4 py-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
-          <div>
+          <div 
+            className="opacity-0 transition-all duration-1000"
+            style={{ transform: 'translateY(50px)' }}
+          >
             <h3 className="text-5xl md:text-6xl font-bold mb-6">
               <span className="text-red-600">REACH OUT</span>, SAY<br />
               HELLO, OR<br />
@@ -131,7 +140,12 @@ const ContactSection = () => {
           </div>
 
           {/* Right Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form 
+            onSubmit={handleSubmit} 
+            className="space-y-6 opacity-0 transition-all duration-1000"
+            style={{ transform: 'translateY(50px)' }}
+            ref={formRef}
+          >
             <div>
               <input
                 type="text"
@@ -163,7 +177,7 @@ const ContactSection = () => {
                 onChange={handleChange}
                 placeholder="Message"
                 required
-                rows="4"
+                rows={4}
                 className="w-full bg-transparent border-b border-gray-700 py-3 px-0 text-white placeholder-gray-500 focus:border-red-600 focus:outline-none transition-colors duration-300 resize-none"
               />
             </div>

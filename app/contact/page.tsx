@@ -1,12 +1,25 @@
 "use client";
 import React, { useEffect, useRef, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import Header from '@/app/components/Header';
 import Footer from '../components/layout/Footer';
 
+// Animation configuration interface
+interface AnimationConfig {
+  duration?: number;
+  delay?: number;
+  y?: number;
+  opacity?: number;
+  // Add other animation properties as needed
+}
+
 // Simulated GSAP animation hook
-const useGSAPAnimation = (ref, animationConfig) => {
+const useGSAPAnimation = <T extends HTMLElement>(
+  ref: React.RefObject<T | null>,
+  animationConfig?: AnimationConfig
+) => {
   useEffect(() => {
     if (!ref.current) return;
     
@@ -28,7 +41,11 @@ const useGSAPAnimation = (ref, animationConfig) => {
   }, [ref]);
 };
 
-const ContactSection = () => {
+interface ContactSectionProps {
+  // No props needed for now
+}
+
+const ContactSection: React.FC<ContactSectionProps> = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -36,15 +53,15 @@ const ContactSection = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const heroRef = useRef(null);
-  const formRef = useRef(null);
-  const mapRef = useRef(null);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<HTMLDivElement>(null);
 
   useGSAPAnimation(heroRef);
   useGSAPAnimation(formRef);
   useGSAPAnimation(mapRef);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     
@@ -57,15 +74,23 @@ const ContactSection = () => {
     setIsSubmitting(false);
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
   };
 
-  // Addis Ababa coordinates
-  const position = [9.0320, 38.7469];
+  const MapView = () => {
+    const position: [number, number] = [9.0320, 38.7469];
+    const map = useMap();
+    
+    useEffect(() => {
+      map.setView(position, 13);
+    }, [map, position]);
+
+    return null;
+  };
 
   return (
     <div className="bg-[#0a0a0a] text-white">
@@ -177,7 +202,7 @@ const ContactSection = () => {
                 onChange={handleChange}
                 placeholder="Message"
                 required
-                rows="4"
+                rows={4}
                 className="w-full bg-transparent border-b border-gray-700 py-3 px-0 text-white placeholder-gray-500 focus:border-red-600 focus:outline-none transition-colors duration-300 resize-none"
               />
             </div>
@@ -203,16 +228,18 @@ const ContactSection = () => {
       >
         <div className="h-[500px] w-full border-4 border-red-600 overflow-hidden">
           <MapContainer 
-            center={position} 
-            zoom={13} 
+            center={[9.0320, 38.7469]}
+            zoom={13}
             style={{ height: '100%', width: '100%' }}
             scrollWheelZoom={false}
+            zoomControl={false}
           >
+            <MapView />
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <Marker position={position}>
+            <Marker position={[9.0320, 38.7469]}>
               <Popup>
                 <div className="text-center">
                   <strong>Urban Film Production</strong><br />

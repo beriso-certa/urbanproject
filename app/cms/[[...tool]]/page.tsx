@@ -7,22 +7,12 @@
  * https://github.com/sanity-io/next-sanity
  */
 
+'use client'
+
 import { NextStudio } from 'next-sanity/studio'
 import config from '../../../sanity.config'
-import type { Metadata } from 'next'
 
 export const dynamic = 'force-static'
-
-export const metadata = {
-  title: 'Sanity Studio',
-  description: 'Sanity Studio',
-}
-
-export const viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  viewportFit: 'cover',
-}
 
 export default function StudioPage() {
   return <NextStudio config={config} />

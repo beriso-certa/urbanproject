@@ -205,7 +205,7 @@ const Footer = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting && entry.target instanceof HTMLElement) {
             entry.target.style.opacity = '1';
             entry.target.style.transform = 'translateY(0)';
           }
@@ -225,7 +225,7 @@ const Footer = () => {
   useEffect(() => {
     if (!patternRef.current) return;
     
-    let animationFrame;
+    let animationFrame: number | undefined;
     let offset = 0;
     
     const animate = () => {
@@ -234,6 +234,16 @@ const Footer = () => {
         patternRef.current.style.backgroundPosition = `${offset}px 0`;
       }
       animationFrame = requestAnimationFrame(animate);
+    };
+    
+    // Start the animation
+    animationFrame = requestAnimationFrame(animate);
+    
+    // Cleanup function
+    return () => {
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+      }
     };
     
     animate();

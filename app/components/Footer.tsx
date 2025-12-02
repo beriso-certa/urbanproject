@@ -2,16 +2,17 @@ import React, { useEffect, useRef } from 'react';
 
 const Footer = () => {
   const footerRef = useRef(null);
-  const patternRef = useRef(null);
+  const patternRef = useRef<HTMLDivElement>(null);
 
   // GSAP-like scroll animation
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
+          const target = entry.target as HTMLElement;
           if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
+            target.style.opacity = '1';
+            target.style.transform = 'translateY(0)';
           }
         });
       },
@@ -29,7 +30,7 @@ const Footer = () => {
   useEffect(() => {
     if (!patternRef.current) return;
     
-    let animationFrame;
+    let animationFrame: number;
     let offset = 0;
     
     const animate = () => {

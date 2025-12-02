@@ -109,7 +109,7 @@ export default function Blogs() {
           {blogPosts.map((post, index) => (
             <div 
               key={post.id}
-              ref={el => postsRef.current[index] = el}
+              ref={el => { postsRef.current[index] = el; }}
               className="grid md:grid-cols-3 gap-8 group cursor-pointer hover:opacity-90 transition-opacity"
             >
               {/* Blog Image */}

@@ -141,7 +141,9 @@ export default function BlogPage() {
           {blogPosts.map((post, index) => (
             <div 
               key={post.id}
-            ref={el => cardsRef.current[index] = el}
+              ref={(el: HTMLDivElement | null) => {
+                if (el) cardsRef.current[index] = el;
+              }}
               className="group relative overflow-hidden rounded-lg bg-gray-900 hover:bg-gray-800 transition-colors duration-300"
             >
               <div className="relative h-64">
