@@ -1,47 +1,66 @@
-import { defineType, defineField } from "sanity";
-
-export default defineType({
-  name: "work",
-  title: "Work Item",
-  type: "document",
+// sanity/schemaTypes/work.ts
+export default {
+  name: 'work',
+  title: 'Work',
+  type: 'document',
   fields: [
-    defineField({
-      name: "title",
-      type: "string",
-      title: "Title",
-    }),
-    defineField({
-      name: "subtitle",
-      type: "string",
-      title: "Subtitle",
-    }),
-    defineField({
-      name: "videoUrl",
-      type: "url",
-      title: "Video / Image URL",
-    }),
-    defineField({
-      name: "thumbnail",
-      type: "image",
-      title: "Thumbnail",
-      options: { hotspot: true },
-    }),
-    defineField({
-      name: "category",
-      type: "string",
-      title: "Category",
-    }),
-    defineField({
-      name: "order",
-      type: "number",
-      title: "Order",
-    }),
-  ],
-  orderings: [
     {
-      title: "Order Asc",
-      name: "orderAsc",
-      by: [{ field: "order", direction: "asc" }],
+      name: 'title',
+      title: 'Title',
+      type: 'string',
+      validation: (Rule: any) => Rule.required(),
+    },
+    {
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {
+        source: 'title',
+        maxLength: 96,
+      },
+      validation: (Rule: any) => Rule.required(),
+    },
+    {
+      name: 'category',
+      title: 'Category',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'TV Commercial', value: 'tv-commercial' },
+          { title: 'Storytelling', value: 'storytelling' },
+          { title: 'Campaign', value: 'campaign' },
+        ],
+      },
+      validation: (Rule: any) => Rule.required(),
+    },
+    {
+      name: 'mainImage',
+      title: 'Main Image',
+      type: 'image',
+      options: {
+        hotspot: true,
+      },
+      validation: (Rule: any) => Rule.required(),
+    },
+    {
+      name: 'description',
+      title: 'Description',
+      type: 'text',
     },
   ],
-});
+  preview: {
+    select: {
+      title: 'title',
+      media: 'mainImage',
+      category: 'category',
+    },
+    prepare(selection: any) {
+      const { title, media, category } = selection;
+      return {
+        title,
+        media,
+        subtitle: category,
+      };
+    },
+  },
+};

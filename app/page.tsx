@@ -1,4 +1,4 @@
-import { Hero } from "./components/Hero";
+
 
 import ServicesAccordion, { Service } from "./components/ServicesAccordion";
 import QuoteSection from "./components/QuoteSection";
@@ -18,7 +18,8 @@ import {
 import Testimonials from "./components/Testimonials";
 import WhyUrban from "./components/WhyUrban";
 import Services from "./components/Services";
-import WorkPage from "./work/page";
+import WorkPage from "./works/page";
+import { Hero } from "./components/Hero";
 
 export const revalidate = 60; // ISR
 

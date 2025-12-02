@@ -3,6 +3,8 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface Props {
   data: {
@@ -14,6 +16,7 @@ interface Props {
 
 export default function Navbar({ data }: Props) {
   const navRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     gsap.from(navRef.current, {
@@ -31,8 +34,60 @@ export default function Navbar({ data }: Props) {
     cta: 'CONTACT US'
   };
 
+  // Helper function to get the path for each menu item
+const getPath = (item: string) => {
+  const pathMap: Record<string, string> = {
+    'HOME': '/',
+    'WORK': '/work',
+    'SERVICES': '/services',
+    'ABOUT US': '/about',
+    'BLOGS': '/Blogs',
+    'CONTACT US': '/contact'
+  };
+  
+  return pathMap[item] || `/${item.toLowerCase().replace(' ', '-')}`;
+};
+
+  // Check if a menu item is active based on current pathname
+  const isActive = (item: string) => {
+    const path = getPath(item);
+    const currentPath = pathname.toLowerCase();
+    
+    // Special case for home page
+    if (item === 'HOME') {
+      return currentPath === '/' || currentPath === '';
+    }
+    
+    // Check if the current path starts with the item's path
+    if (currentPath.startsWith(path.toLowerCase())) {
+      return true;
+    }
+    
+    // Special handling for work section in home page
+    if (currentPath === '/' && item === 'WORK' && window.location.hash === '#work') {
+      return true;
+    }
+    
+    // Special handling for services section in home page
+    if (currentPath === '/' && item === 'SERVICES' && window.location.hash === '#services') {
+      return true;
+    }
+    
+    // Special handling for blog section in home page
+    if (currentPath === '/' && item === 'BLOGS' && window.location.hash === '#blog') {
+      return true;
+    }
+    
+    // Special handling for contact section in home page
+    if (currentPath === '/' && item === 'CONTACT US' && window.location.hash === '#contact') {
+      return true;
+    }
+    
+    return false;
+  };
+
   return (
-    <div className="relative w-full bg-[#0a0f1c] border-b border-gray-800">
+    <div className="fixed top-0 left-0 right-0 z-50 w-full bg-[#0a0f1c] bg-opacity-90 backdrop-blur-sm border-b border-gray-800">
       {/* Top gradient line */}
       <div className="h-1 bg-gradient-to-r from-purple-500 to-blue-500" />
       
@@ -40,8 +95,8 @@ export default function Navbar({ data }: Props) {
         ref={navRef}
         className="container mx-auto px-6 py-4 flex items-center justify-between"
       >
-        {/* Logo */}
-        <div className="flex items-center gap-3 text-white text-2xl font-bold">
+        {/* Logo with Link */}
+        <Link href="/" className="flex items-center gap-3 text-white text-2xl font-bold">
           <Image
             src={safeData.logo}
             alt="Urban Logo"
@@ -50,28 +105,36 @@ export default function Navbar({ data }: Props) {
             priority
           />
           <span className="font-light">urban</span>
-        </div>
+        </Link>
 
         {/* Navigation Menu */}
         <nav className="hidden md:flex items-center space-x-1">
-          {safeData.menu.map((item, index) => (
-            <a
-              key={index}
-              href={`#${item.toLowerCase().replace(' ', '-')}`}
-              className={`px-4 py-2 text-sm font-medium uppercase tracking-wider transition-colors
-                ${index === 0 
-                  ? 'bg-white text-black px-6' 
-                  : 'text-gray-300 hover:text-white'}`}
-            >
-              {item}
-            </a>
-          ))}
+          {safeData.menu.map((item, index) => {
+            const path = getPath(item);
+            const active = isActive(item);
+            
+            return (
+              <Link
+                key={index}
+                href={path}
+                className={`px-4 py-2 text-sm font-medium uppercase tracking-wider transition-colors
+                  ${active 
+                    ? 'bg-white text-black px-6' 
+                    : 'text-gray-300 hover:text-white'}`}
+              >
+                {item}
+              </Link>
+            );
+          })}
         </nav>
 
         {/* Contact Button */}
-        <button className="hidden md:block bg-white text-black px-6 py-2 text-sm font-medium uppercase tracking-wider hover:bg-gray-100 transition-colors">
+        <Link 
+          href="/contact"
+          className="hidden md:block bg-white text-black px-6 py-2 text-sm font-medium uppercase tracking-wider hover:bg-gray-100 transition-colors"
+        >
           {safeData.cta}
-        </button>
+        </Link>
 
         {/* Mobile menu button (hidden for now) */}
         <button className="md:hidden text-white">
@@ -80,9 +143,6 @@ export default function Navbar({ data }: Props) {
           </svg>
         </button>
       </div>
-      
-      {/* Bottom gradient line */}
-     
     </div>
   );
 }
