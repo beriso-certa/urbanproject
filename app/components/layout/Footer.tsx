@@ -1,9 +1,8 @@
 
-
+"use client";
 
 import React from 'react';
 import { useEffect, useRef } from 'react';
-import type { FC } from 'react';
 
 const Footer = () => {
   const footerRef = useRef<HTMLDivElement>(null);
