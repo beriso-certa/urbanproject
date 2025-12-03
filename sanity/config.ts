@@ -13,7 +13,5 @@ export default defineConfig({
     deskTool(),
     visionTool(),
   ],
-  schema: {
-    types: schema,
-  },
+  schema: schema,  // Directly pass the schema array
 });

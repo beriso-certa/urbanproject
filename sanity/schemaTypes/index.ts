@@ -1,10 +1,5 @@
-import { defineType, defineField } from 'sanity';
-import heroSection from './herosection';
-import { serviceItem, serviceCategory } from './service';
+import { type SchemaTypeDefinition } from 'sanity'
 
-// Export an array of schema types
-export const schema = [
-  heroSection,
-  serviceItem,
-  serviceCategory,
-];
+export const schema: { types: SchemaTypeDefinition[] } = {
+  types: [],
+}
