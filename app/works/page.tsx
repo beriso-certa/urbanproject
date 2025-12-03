@@ -1,5 +1,5 @@
 import OurWorkSection from '../components/WorkGrid';
-import client from '@/sanity/lib/client';
+import { client } from '@/sanity/lib/client';
 import { WORK_QUERY } from '@/sanity/lib/queries';
 import { WorkItem } from '../components/WorkGrid';
 

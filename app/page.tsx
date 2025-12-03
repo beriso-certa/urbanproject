@@ -6,7 +6,7 @@ import TrustedBy, { Client } from "./components/TrustedBy";
 
 import Footer from "./components/layout/Footer";
 import Header from "./components/Header";
-import client from "../sanity/lib/client";
+import { client } from "../sanity/lib/client";
 import BlogPage from "./(routes)/blog/page";
 import {
   WORK_QUERY,
