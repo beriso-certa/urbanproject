@@ -1,7 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import dynamic from 'next/dynamic';
 import { LatLngExpression } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+
+// Using dynamic import with ssr: false and explicit type casting
+const Map = dynamic<{ position: LatLngExpression }>(
+  () => {
+    // This function only runs on the client side
+    const MapComponent = require('../../components/Map').default;
+    return Promise.resolve(MapComponent);
+  },
+  {
+    ssr: false,
+    loading: () => <div className="h-96 w-full bg-gray-800 animate-pulse" />
+  }
+);
 
 // Simulated GSAP animation hook
 interface AnimationConfig {
@@ -198,30 +211,14 @@ const ContactSection = () => {
       {/* Map Section */}
       <div 
         ref={mapRef}
-        className="max-w-7xl mx-auto px-4 py-12 opacity-0 transition-all duration-1000"
+        className="relative py-12 px-4 opacity-0 transition-all duration-1000"
         style={{ transform: 'translateY(50px)' }}
       >
-        <div className="h-[500px] w-full border-4 border-red-600 overflow-hidden">
-          <MapContainer 
-            center={position} 
-            zoom={13} 
-            style={{ height: '100%', width: '100%' }}
-            scrollWheelZoom={false}
-          >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <Marker position={position}>
-              <Popup>
-                <div className="text-center">
-                  <strong>Urban Film Production</strong><br />
-                  DM Geda Building, 7th Floor<br />
-                  Addis Ababa, Ethiopia
-                </div>
-              </Popup>
-            </Marker>
-          </MapContainer>
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-3xl font-bold mb-8 text-center">OUR LOCATION</h2>
+          <div className="rounded-xl overflow-hidden border border-gray-700">
+            <Map position={position} />
+          </div>
         </div>
       </div>
 
