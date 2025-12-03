@@ -7,7 +7,7 @@ import Header from '@/app/components/Header';
 
 // Default header data
 const defaultHeaderData = {
-  logo: "/images/logo.png",
+  logo: "/images/logos.png",
   menu: ["Work", "Services", "About", "Blog", "Contact"],
   cta: "Get in touch"
 };

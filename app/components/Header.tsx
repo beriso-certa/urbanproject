@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import Image from "next/image";
 import Link from "next/link";
@@ -17,6 +17,7 @@ interface Props {
 export default function Navbar({ data }: Props) {
   const navRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+  const [hash, setHash] = useState<string>("");
 
   useEffect(() => {
     gsap.from(navRef.current, {
@@ -27,6 +28,19 @@ export default function Navbar({ data }: Props) {
     });
   }, []);
 
+  // Set hash from window only after component mounts
+  useEffect(() => {
+    setHash(window.location.hash);
+
+    // Listen for hash changes
+    const handleHashChange = () => {
+      setHash(window.location.hash);
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
+
   // Add default values
   const safeData = data || {
     logo: '/images/logos.png',
@@ -35,18 +49,18 @@ export default function Navbar({ data }: Props) {
   };
 
   // Helper function to get the path for each menu item
-const getPath = (item: string) => {
-  const pathMap: Record<string, string> = {
-    'HOME': '/',
-    'WORK': '/work',
-    'SERVICES': '/services',
-    'ABOUT US': '/about',
-    'BLOGS': '/Blogs',
-    'CONTACT US': '/contact'
+  const getPath = (item: string) => {
+    const pathMap: Record<string, string> = {
+      'HOME': '/',
+      'WORK': '/work',
+      'SERVICES': '/services',
+      'ABOUT US': '/about',
+      'BLOGS': '/Blogs',
+      'CONTACT US': '/contact'
+    };
+    
+    return pathMap[item] || `/${item.toLowerCase().replace(' ', '-')}`;
   };
-  
-  return pathMap[item] || `/${item.toLowerCase().replace(' ', '-')}`;
-};
 
   // Check if a menu item is active based on current pathname
   const isActive = (item: string) => {
@@ -63,24 +77,12 @@ const getPath = (item: string) => {
       return true;
     }
     
-    // Special handling for work section in home page
-    if (currentPath === '/' && item === 'WORK' && window.location.hash === '#work') {
-      return true;
-    }
-    
-    // Special handling for services section in home page
-    if (currentPath === '/' && item === 'SERVICES' && window.location.hash === '#services') {
-      return true;
-    }
-    
-    // Special handling for blog section in home page
-    if (currentPath === '/' && item === 'BLOGS' && window.location.hash === '#blog') {
-      return true;
-    }
-    
-    // Special handling for contact section in home page
-    if (currentPath === '/' && item === 'CONTACT US' && window.location.hash === '#contact') {
-      return true;
+    // Special handling for sections on home page with hash
+    if (currentPath === '/') {
+      if (item === 'WORK' && hash === '#work') return true;
+      if (item === 'SERVICES' && hash === '#services') return true;
+      if (item === 'BLOGS' && hash === '#blog') return true;
+      if (item === 'CONTACT US' && hash === '#contact') return true;
     }
     
     return false;

@@ -30,65 +30,35 @@ interface OurWorkSectionProps {
   works: WorkItem[];
 }
 
-// Custom hook for intersection observer
-function useIntersectionObserver() {
-  const [isIntersecting, setIsIntersecting] = useState(false);
-  const ref = useRef<HTMLElement>(null);
+export default function OurWorkSection({ works: initialWorks }: OurWorkSectionProps) {
+  const [displayedWorks, setDisplayedWorks] = useState<WorkItem[]>(initialWorks || []);
+  const sectionRef = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Only run in browser
-    if (typeof window === 'undefined') return;
+    // Show first 8 works
+    setDisplayedWorks(mockWorks.slice(0, 8));
+  }, []);
 
+  // GSAP-like scroll animations
+  useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsIntersecting(true);
-          observer.disconnect();
-        }
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('opacity-100', 'translate-y-0');
+          }
+        });
       },
       { threshold: 0.1 }
     );
 
-    const currentRef = ref.current;
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
+    const elements = document.querySelectorAll('.fade-in');
+    elements.forEach((el) => observer.observe(el));
 
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
-  }, []);
-
-  return [ref, isIntersecting] as const;
-}
-
-export default function OurWorkSection({ works: initialWorks }: OurWorkSectionProps) {
-  const [displayedWorks, setDisplayedWorks] = useState<WorkItem[]>([]);
-  const [isMounted, setIsMounted] = useState(false);
-  const [sectionRef, isSectionVisible] = useIntersectionObserver();
-
-  useEffect(() => {
-    // Only run on client side
-    setIsMounted(true);
-    setDisplayedWorks(mockWorks.slice(0, 8));
-  }, []);
-
-  // If not mounted yet, return a skeleton
-  if (!isMounted) {
-    return (
-      <section className="relative bg-[#1a2332] text-white py-20 px-4 overflow-hidden">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="h-64 bg-gray-800 rounded-lg animate-pulse" />
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-  }
+    return () => observer.disconnect();
+  }, [displayedWorks]);
 
   return (
     <section 
@@ -98,40 +68,54 @@ export default function OurWorkSection({ works: initialWorks }: OurWorkSectionPr
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <p className="text-red-600 text-sm font-bold tracking-widest mb-4 transition-all duration-1000">
+          <p className="text-red-600 text-sm font-bold tracking-widest mb-4 fade-in opacity-0 translate-y-4 transition-all duration-1000">
             OUR WORK
           </p>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 transition-all duration-1000">
+          <h2 
+            ref={titleRef}
+            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 fade-in opacity-0 translate-y-8 transition-all duration-1000 delay-100"
+          >
             OUR WORK, OUR VOICE
           </h2>
         </div>
 
         {/* Work Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+        <div
+          ref={gridRef}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12"
+        >
           {displayedWorks.map((work, index) => (
             <Link 
               key={work._id}
               href={`/work/${work.slug}`}
-              className={`group block transition-all duration-1000 ${
-                isSectionVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-              }`}
-              style={{ transitionDelay: `${index * 100}ms` }}
+              className="group block fade-in opacity-0 translate-y-8 transition-all duration-1000"
+              style={{ transitionDelay: `${200 + index * 100}ms` }}
             >
               <div className="relative overflow-hidden rounded-lg bg-gray-800">
+                {/* Image Container */}
                 <div className="relative aspect-[4/3] bg-gray-700">
                   <Image
                     src={work.mainImage}
                     alt={work.title}
                     fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    sizes="(max-width: 768px) 100vw, 50vw"
                   />
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <span className="text-white font-medium text-lg">View Project</span>
-                  </div>
+                  
+                  {/* Overlay on hover */}
+                  <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2">{work.title}</h3>
-                  <p className="text-gray-400 text-sm uppercase tracking-wider">{work.category}</p>
+
+                {/* Title and Arrow Overlay */}
+                <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/90 via-black/60 to-transparent">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xl md:text-2xl font-bold text-white uppercase tracking-wide">
+                      {work.title}
+                    </h3>
+                    <div className="w-10 h-10 rounded-sm bg-red-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <ArrowRight className="w-5 h-5 text-white" strokeWidth={3} />
+                    </div>
+                  </div>
                 </div>
               </div>
             </Link>
@@ -139,12 +123,7 @@ export default function OurWorkSection({ works: initialWorks }: OurWorkSectionPr
         </div>
 
         {/* View All Button */}
-        <div 
-          className={`text-center transition-all duration-1000 ${
-            isSectionVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
-          style={{ transitionDelay: `${displayedWorks.length * 100}ms` }}
-        >
+        <div className="text-center fade-in opacity-0 translate-y-4 transition-all duration-1000 delay-1000">
           <Link 
             href="/works"
             className="inline-flex items-center gap-3 px-8 py-3 border border-white text-white hover:bg-white hover:text-black transition-all duration-300 group"
@@ -153,11 +132,11 @@ export default function OurWorkSection({ works: initialWorks }: OurWorkSectionPr
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
           </Link>
         </div>
-
-        {/* Decorative Background Elements */}
-        <div className="absolute top-20 left-10 w-64 h-64 bg-red-600/5 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl pointer-events-none" />
       </div>
+
+      {/* Decorative Background Elements */}
+      <div className="absolute top-20 left-10 w-64 h-64 bg-red-600/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl pointer-events-none" />
     </section>
   );
 }
