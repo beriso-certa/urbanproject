@@ -2,49 +2,67 @@
 
 import { LatLngExpression } from 'leaflet';
 import dynamic from 'next/dynamic';
+import { useEffect, useState } from 'react';
 
-const MapContainer = dynamic(
-  () => import('react-leaflet').then((mod) => mod.MapContainer),
-  { ssr: false }
-);
-
-const TileLayer = dynamic(
-  () => import('react-leaflet').then((mod) => mod.TileLayer),
-  { ssr: false }
-);
-
-const Marker = dynamic(
-  () => import('react-leaflet').then((mod) => mod.Marker),
-  { ssr: false }
-);
-
-const Popup = dynamic(
-  () => import('react-leaflet').then((mod) => mod.Popup),
-  { ssr: false }
+// This component will only be rendered on the client side
+const ClientSideMap = dynamic(
+  () => import('react-leaflet').then((mod) => {
+    const { MapContainer, TileLayer, Marker, Popup } = mod;
+    return function ClientMap({ position, markerText }: { position: LatLngExpression, markerText: string }) {
+      return (
+        <MapContainer 
+          center={position} 
+          zoom={13} 
+          style={{ height: '100%', width: '100%' }}
+          className="rounded-lg z-0"
+          zoomControl={false}
+        >
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          />
+          <Marker position={position}>
+            <Popup>
+              <div className="text-center">
+                <strong>Urban Film Production</strong><br />
+                {markerText}
+              </div>
+            </Popup>
+          </Marker>
+        </MapContainer>
+      );
+    };
+  }),
+  { 
+    ssr: false,
+    loading: () => <div className="h-[500px] w-full bg-gray-800" />
+  }
 );
 
 interface MapProps {
   position: LatLngExpression;
   className?: string;
+  markerText?: string;
 }
 
-const Map = ({ position, className = '' }: MapProps) => {
+const Map = ({ 
+  position = [9.0320, 38.7469], 
+  className = '', 
+  markerText = 'DM Geda Building, 7th Floor, Addis Ababa, Ethiopia' 
+}: MapProps) => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return <div className={`h-[500px] w-full bg-gray-800 ${className}`} />;
+  }
+
   return (
-    <div className={`h-96 w-full ${className}`}>
-      <MapContainer 
-        center={position} 
-        zoom={13} 
-        style={{ height: '100%', width: '100%' }}
-        className="z-0"
-      >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-        <Marker position={position}>
-          <Popup>Our Location</Popup>
-        </Marker>
-      </MapContainer>
+    <div className={`h-[500px] w-full border-4 border-red-600 overflow-hidden ${className}`}>
+      <ClientSideMap position={position} markerText={markerText} />
     </div>
   );
 };

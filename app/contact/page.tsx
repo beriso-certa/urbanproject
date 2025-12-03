@@ -1,10 +1,45 @@
 "use client";
 import React, { useEffect, useRef, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import L from 'leaflet';
+import dynamic from 'next/dynamic';
 import 'leaflet/dist/leaflet.css';
 import Header from '@/app/components/Header';
 import Footer from '../components/layout/Footer';
+
+// Dynamically import Map components with SSR disabled
+const MapWithNoSSR = dynamic(
+  () => import('react-leaflet').then((mod) => {
+    const { MapContainer, TileLayer, Marker, Popup } = mod;
+    
+    const position: [number, number] = [9.0320, 38.7469];
+    
+    return function MapWrapper() {
+      return (
+        <MapContainer 
+          center={position} 
+          zoom={13} 
+          style={{ height: '100%', width: '100%' }}
+          className="rounded-lg z-0"
+          zoomControl={false}
+        >
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          />
+          <Marker position={position}>
+            <Popup>
+              <div className="text-center">
+                <strong>Urban Film Production</strong><br />
+                DM Geda Building, 7th Floor<br />
+                Addis Ababa, Ethiopia
+              </div>
+            </Popup>
+          </Marker>
+        </MapContainer>
+      );
+    };
+  }), 
+  { ssr: false }
+);
 
 // Animation configuration interface
 interface AnimationConfig {
@@ -81,16 +116,11 @@ const ContactSection: React.FC<ContactSectionProps> = () => {
     });
   };
 
-  const MapView = () => {
-    const position: [number, number] = [9.0320, 38.7469];
-    const map = useMap();
-    
-    useEffect(() => {
-      map.setView(position, 13);
-    }, [map, position]);
-
-    return null;
-  };
+  const MapView = () => (
+    <div className="h-[500px] w-full border-4 border-red-600 overflow-hidden">
+      <MapWithNoSSR />
+    </div>
+  );
 
   return (
     <div className="bg-[#0a0a0a] text-white">
@@ -230,30 +260,7 @@ const ContactSection: React.FC<ContactSectionProps> = () => {
         className="max-w-7xl mx-auto px-4 py-12 opacity-0 transition-all duration-1000"
         style={{ transform: 'translateY(50px)' }}
       >
-        <div className="h-[500px] w-full border-4 border-red-600 overflow-hidden">
-          <MapContainer 
-            center={[9.0320, 38.7469]}
-            zoom={13}
-            style={{ height: '100%', width: '100%' }}
-            scrollWheelZoom={false}
-            zoomControl={false}
-          >
-            <MapView />
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <Marker position={[9.0320, 38.7469]}>
-              <Popup>
-                <div className="text-center">
-                  <strong>Urban Film Production</strong><br />
-                  DM Geda Building, 7th Floor<br />
-                  Addis Ababa, Ethiopia
-                </div>
-              </Popup>
-            </Marker>
-          </MapContainer>
-        </div>
+        <MapView />
       </div>
 
       {/* Bottom Spacing */}

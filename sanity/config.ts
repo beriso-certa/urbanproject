@@ -1,16 +1,19 @@
-// sanity.config.ts
 import { defineConfig } from 'sanity';
 import { deskTool } from 'sanity/desk';
+import { visionTool } from '@sanity/vision';
+import { schema } from './schemaTypes';
 
-const config = defineConfig({
-  projectId: 'your-project-id', // Make sure this is set
-  dataset: 'production', // Or your dataset name
-  title: 'Your Project',
+export default defineConfig({
+  name: 'default',
+  title: 'Urban Production',
+  projectId: 'otwwa6lf',
+  dataset: 'production',
   basePath: '/studio',
-  plugins: [deskTool()],
+  plugins: [
+    deskTool(),
+    visionTool(),
+  ],
   schema: {
-    // Your schema types here
-  }
+    types: schema,
+  },
 });
-
-export default config;
