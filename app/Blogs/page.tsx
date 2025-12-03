@@ -163,7 +163,11 @@ const BlogsSection = () => {
   return (
     
     <section ref={sectionRef} className="w-full bg-white py-16 lg:py-24">
-      <Header />
+      <Header data={{
+        logo: '/images/logos.png',
+        menu: ['HOME', 'WORK', 'SERVICES', 'ABOUT US', 'BLOGS'],
+        cta: 'CONTACT US'
+      }} />
   
       
       <div className="max-w-7xl mx-auto px-6 lg:px-8">

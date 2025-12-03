@@ -94,7 +94,11 @@ const ContactSection: React.FC<ContactSectionProps> = () => {
 
   return (
     <div className="bg-[#0a0a0a] text-white">
-      <Header />
+      <Header data={{
+        logo: '/images/logos.png',
+        menu: ['HOME', 'WORK', 'SERVICES', 'ABOUT US', 'BLOGS'],
+        cta: 'CONTACT US'
+      }} />
       {/* Hero Section */}
       <div 
         ref={heroRef}
