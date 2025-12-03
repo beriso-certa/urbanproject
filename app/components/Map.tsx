@@ -1,30 +1,39 @@
 'use client';
 
-import { LatLngExpression } from 'leaflet';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
+import 'leaflet/dist/leaflet.css';
 
-// This component will only be rendered on the client side
+// ✅ Dynamically import react-leaflet with SSR disabled
 const ClientSideMap = dynamic(
-  () => import('react-leaflet').then((mod) => {
+  async () => {
+    const mod = await import('react-leaflet');
     const { MapContainer, TileLayer, Marker, Popup } = mod;
-    return function ClientMap({ position, markerText }: { position: LatLngExpression, markerText: string }) {
+
+    return function ClientMap({
+      position,
+      markerText,
+    }: {
+      position: [number, number];
+      markerText: string;
+    }) {
       return (
-        <MapContainer 
-          center={position} 
-          zoom={13} 
+        <MapContainer
+          center={position}
+          zoom={13}
           style={{ height: '100%', width: '100%' }}
           className="rounded-lg z-0"
           zoomControl={false}
         >
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            attribution='&copy; OpenStreetMap contributors'
           />
           <Marker position={position}>
             <Popup>
               <div className="text-center">
-                <strong>Urban Film Production</strong><br />
+                <strong>Urban Film Production</strong>
+                <br />
                 {markerText}
               </div>
             </Popup>
@@ -32,31 +41,31 @@ const ClientSideMap = dynamic(
         </MapContainer>
       );
     };
-  }),
-  { 
+  },
+  {
     ssr: false,
-    loading: () => <div className="h-[500px] w-full bg-gray-800" />
+    loading: () => <div className="h-[500px] w-full bg-gray-800 animate-pulse" />,
   }
 );
 
 interface MapProps {
-  position: LatLngExpression;
+  position?: [number, number];
   className?: string;
   markerText?: string;
 }
 
-const Map = ({ 
-  position = [9.0320, 38.7469], 
-  className = '', 
-  markerText = 'DM Geda Building, 7th Floor, Addis Ababa, Ethiopia' 
+const Map = ({
+  position = [9.032, 38.7469],
+  className = '',
+  markerText = 'DM Geda Building, 7th Floor, Addis Ababa, Ethiopia',
 }: MapProps) => {
-  const [isMounted, setIsMounted] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true);
+    setMounted(true);
   }, []);
 
-  if (!isMounted) {
+  if (!mounted) {
     return <div className={`h-[500px] w-full bg-gray-800 ${className}`} />;
   }
 

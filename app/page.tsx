@@ -1,5 +1,5 @@
 
-
+import dynamic from 'next/dynamic';
 import ServicesAccordion, { Service } from "./components/ServicesAccordion";
 import QuoteSection from "./components/QuoteSection";
 import TrustedBy, { Client } from "./components/TrustedBy";
