@@ -148,7 +148,7 @@ const Services = () => {
           {services.map((service, index) => (
             <div
               key={service.id}
-              ref={el => itemsRef.current[index] = el}
+              ref={el => { itemsRef.current[index] = el; }}
               className="group relative py-8 border-b border-gray-800 last:border-0 flex flex-col md:flex-row gap-8 items-start"
             >
               <div className="w-12 h-12 rounded-full border-2 border-white flex items-center justify-center text-white text-lg font-bold flex-shrink-0">

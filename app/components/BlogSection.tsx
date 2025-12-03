@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
-import Header from '@/app/components/Header';
 import Footer from '../components/layout/Footer';
 
 // Mock blog data (replace with Sanity CMS data)
@@ -84,7 +83,7 @@ const BlogCard = ({ post, index }: { post: BlogPost; index: number }) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-        <Header />
+     
         {/* Image Section */}
         <div className="relative overflow-hidden rounded-sm h-[300px] lg:h-[400px]">
           <div 
