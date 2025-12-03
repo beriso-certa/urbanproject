@@ -31,7 +31,10 @@ const clients: Client[] = [
 const TrustedBy = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const itemsRef = useRef<HTMLDivElement[]>([]);
+  const itemsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const setItemRef = (el: HTMLDivElement | null, index: number) => {
+    itemsRef.current[index] = el;
+  };
   const mainTitleRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
@@ -111,7 +114,7 @@ const TrustedBy = () => {
             {clients.map((client, index) => (
               <div
                 key={client.id}
-                ref={(el) => el && (itemsRef.current[index] = el)}
+                ref={(el) => setItemRef(el, index)}
                 className="flex items-center justify-center p-4 h-32 bg-gray-900/50 hover:bg-gray-800/50 transition-colors duration-300"
               >
                 <div className="relative w-full h-full">
