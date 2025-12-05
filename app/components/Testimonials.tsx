@@ -56,6 +56,13 @@ const Testimonials = () => {
                 <span className="text-xs font-medium tracking-widest mb-4 inline-block">TESTIMONIAL</span>
                 <div className="text-5xl opacity-20 mb-8">"</div>
               </div>
+               <div className="flex justify-center mt-4">
+                <img 
+                  src="/images/cotation.png" 
+                  alt="Quotation mark"
+                  className="h-16 w-auto opacity-80"
+                />
+              </div>
               <h2 
                 className="text-4xl md:text-5xl lg:text-6xl font-bold uppercase tracking-tight leading-tight"
                 style={{
@@ -65,6 +72,7 @@ const Testimonials = () => {
               >
                 WHAT OUR <br /> CLIENTS SAY
               </h2>
+             
             </div>
             <div 
               className="absolute inset-0 opacity-10"
@@ -76,6 +84,14 @@ const Testimonials = () => {
               }}
             />
           </div>
+           <div className="flex justify-center mb-8 space-x-6">
+              <button className="w-12 h-12 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors duration-200">
+                &larr;
+              </button>
+              <button className="w-12 h-12 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition-colors duration-200">
+                &rarr;
+              </button>
+            </div>
 
           {/* Right Testimonial Card */}
           <div 
@@ -83,9 +99,12 @@ const Testimonials = () => {
             className="w-full md:w-1/2 bg-white p-8 md:p-12 shadow-xl relative -mt-20 md:mt-20 md:-ml-20 z-10"
             style={{
               border: '2px solid #F40000',
-              boxShadow: '0 20px 50px rgba(0, 0, 0, 0.1)'
+              boxShadow: '0 20px 50px rgba(0, 0, 0, 0.1)',
+              
             }}
           >
+
+           
             <div className="text-gray-600 text-lg leading-relaxed mb-8">
               "Working with this team was a game-changer for our brand. Their creative approach and technical expertise are unmatched. The attention to detail and commitment to excellence is evident in every project they deliver."
             </div>
@@ -95,14 +114,7 @@ const Testimonials = () => {
               <p className="text-gray-500 text-sm mt-1">Founder, Creative Solutions</p>
             </div>
             
-            <div className="flex justify-end mt-8 space-x-2">
-              <button className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100">
-                &larr;
-              </button>
-              <button className="w-10 h-10 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700">
-                &rarr;
-              </button>
-            </div>
+            
           </div>
         </div>
       </div>

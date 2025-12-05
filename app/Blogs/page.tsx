@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import Header from '@/app/components/Header';
 import Footer from '../components/layout/Footer';
+import { useRouter } from 'next/navigation';
 
 
 // Mock blog data (replace with Sanity CMS data)
@@ -57,6 +58,7 @@ interface BlogCardProps {
 }
 
 const BlogCard = ({ post, index }: BlogCardProps) => {
+  const router = useRouter();
   const cardRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -82,43 +84,77 @@ const BlogCard = ({ post, index }: BlogCardProps) => {
     card.style.transform = 'translateY(50px)';
     card.style.transition = `all 0.8s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.1}s`;
     observer.observe(card);
+    
+    return () => observer.disconnect();
   }, [index]);
+
+  // Handle click on the arrow button
+  const handleArrowClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent event bubbling to parent
+    router.push(`/blog/${post.slug}`);
+  };
+
+  // Handle click on the entire card
+  const handleCardClick = () => {
+    router.push(`/blog/${post.slug}`);
+  };
 
   return (
     <div
-      ref={cardRef}
-      className="group relative overflow-hidden"
+     ref={cardRef}
+      className="group relative overflow-hidden cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={handleCardClick}
     >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
      
         {/* Image Section */}
-        <div className="relative overflow-hidden rounded-sm h-[300px] lg:h-[400px]">
+        <div className="relative overflow-hidden rounded-sm h-[300px] lg:h-[500px] w-full">
           <div 
-            className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out"
+            className="absolute inset-0 w-full h-full bg-cover bg-center transition-all duration-700 ease-out "
             style={{
               backgroundImage: `url(${post.image})`,
-              transform: isHovered ? 'scale(1.1)' : 'scale(1)'
+               transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+               backgroundSize: 'cover'
+            
+             
+
             }}
           />
-          <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-500" />
+         <div className={`absolute inset-0 transition-all duration-500 ${
+    isHovered ? 'bg-black/30' : 'bg-black/40'
+  }`} />
+
+  {/* Category tag */}
+  <div className="absolute bottom-6 left-6">
+    <span className="inline-block bg-white/90 text-black px-4 py-1 text-sm font-medium uppercase tracking-wider">
+      {post.category}
+    </span>
+  </div>
+
+
         </div>
 
         {/* Content Section */}
-        <div className="space-y-6">
+        <div className="space-y-6 py-6 lg:py-12 px-4 lg:px-12">
           <div className="flex items-center justify-between">
             <h3 className="text-2xl lg:text-3xl font-bold tracking-tight max-w-md">
               {post.title}
             </h3>
             <button 
-              className="flex-shrink-0 w-12 h-12 bg-red-600 rounded-full flex items-center justify-center hover:bg-red-700 transition-all duration-300"
-              style={{
-                transform: isHovered ? 'scale(1.1) rotate(45deg)' : 'scale(1) rotate(0deg)'
-              }}
-            >
-              <ArrowRight className="w-6 h-6 text-white" />
-            </button>
+  className="flex-shrink-0 w-12 h-12 bg-red-600 rounded-full flex items-center justify-center hover:bg-red-700 transition-all duration-300"
+  onClick={(e) => {
+    // Your click handler code here
+  }}
+  style={{
+    transform: isHovered ? 'scale(1.1) rotate(45deg)' : 'scale(1) rotate(0deg)'
+  }}
+>
+  <ArrowRight className="w-6 h-6 text-white" />
+</button>
           </div>
           
           <p className="text-gray-700 text-base lg:text-lg leading-relaxed">
@@ -190,8 +226,6 @@ const BlogsSection = () => {
         </div>
       </div>
       <Footer />
-      
-     
     </section>
   );
 };

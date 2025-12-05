@@ -88,14 +88,46 @@ export default function Navbar({ data }: Props) {
     return false;
   };
 
+  // Add scroll effect for header
+  useEffect(() => {
+    const header = navRef.current?.parentElement;
+    if (!header) return;
+
+    let lastScroll = 0;
+    
+    const handleScroll = () => {
+      const currentScroll = window.scrollY;
+      
+      if (currentScroll <= 0) {
+        header.style.transform = 'translateY(0)';
+        header.style.boxShadow = 'none';
+      } else if (currentScroll > lastScroll && currentScroll > 100) {
+        // Scrolling down
+        header.style.transform = 'translateY(-100%)';
+      } else {
+        // Scrolling up
+        header.style.transform = 'translateY(0)';
+        header.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+      }
+      
+      lastScroll = currentScroll;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 w-full bg-[#0a0f1c] bg-opacity-90 backdrop-blur-sm border-b border-gray-800">
+    <div 
+      className="fixed top-0 left-0 right-0 z-[1000] w-full bg-[#0a0f1c] bg-opacity-95 backdrop-blur-sm border-b border-gray-800 transition-transform duration-300 ease-in-out"
+      style={{ willChange: 'transform' }}
+    >
       {/* Top gradient line */}
       <div className="h-1 bg-gradient-to-r from-purple-500 to-blue-500" />
       
       <div
         ref={navRef}
-        className="container mx-auto px-6 py-4 flex items-center justify-between"
+        className="container mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between"
       >
         {/* Logo with Link */}
         <Link href="/" className="flex items-center gap-3 text-white text-2xl font-bold">
