@@ -194,15 +194,15 @@ const WhyUrban = ({
           {/* Right side - Buttons */}
           <div 
   ref={buttonsRef} 
-  className="lg:col-span-3 flex flex-col sm:flex-row lg:flex-col gap-4 mt-8 lg:mt-0 w-full lg:w-auto"
+  className="lg:col-span-3 flex flex-row gap-4 mt-8 lg:mt-0 w-full"
 >
-  <button className="flex-1 lg:flex-none bg-transparent border border-white text-white py-4 px-6 text-sm sm:text-base font-bold uppercase tracking-wider transition-all duration-300 hover:bg-white hover:text-black whitespace-nowrap">
+  <button className="flex-1 bg-transparent border border-white text-white py-4 px-6 text-sm sm:text-base font-bold uppercase tracking-wider transition-all duration-300 hover:bg-white hover:text-black whitespace-nowrap">
     {characteristics.emotional}
   </button>
-  <button className="flex-1 lg:flex-none bg-transparent border border-white text-white py-4 px-6 text-sm sm:text-base font-bold uppercase tracking-wider transition-all duration-300 hover:bg-white hover:text-black whitespace-nowrap">
+  <button className="flex-1 bg-transparent border border-white text-white py-4 px-6 text-sm sm:text-base font-bold uppercase tracking-wider transition-all duration-300 hover:bg-white hover:text-black whitespace-nowrap">
     {characteristics.fearless}
   </button>
-  <button className="flex-1 lg:flex-none bg-transparent border border-white text-white py-4 px-6 text-sm sm:text-base font-bold uppercase tracking-wider transition-all duration-300 hover:bg-white hover:text-black whitespace-nowrap">
+  <button className="flex-1 bg-transparent border border-white text-white py-4 px-6 text-sm sm:text-base font-bold uppercase tracking-wider transition-all duration-300 hover:bg-white hover:text-black whitespace-nowrap">
     {characteristics.authentic}
   </button>
 </div>

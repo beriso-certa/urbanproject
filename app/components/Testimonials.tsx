@@ -45,76 +45,49 @@ const Testimonials = () => {
   return (
     <section ref={sectionRef} className="relative py-20 md:py-32 bg-white overflow-hidden">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row">
           {/* Left Red Panel */}
           <div 
             ref={leftPanelRef}
-            className="w-full md:w-1/2 h-[500px] bg-[#F40000] text-white p-12 relative overflow-hidden"
+            className="w-full lg:w-2/5 bg-[#F40000] text-white p-12 relative min-h-[500px] flex items-center"
           >
-            <div className="relative z-10 h-full flex flex-col justify-between">
-              <div>
-                <span className="text-xs font-medium tracking-widest mb-4 inline-block">TESTIMONIAL</span>
-                <div className="text-5xl opacity-20 mb-8">"</div>
-              </div>
-               <div className="flex justify-center mt-4">
-                <img 
-                  src="/images/cotation.png" 
-                  alt="Quotation mark"
-                  className="h-16 w-auto opacity-80"
-                />
-              </div>
-              <h2 
-                className="text-4xl md:text-5xl lg:text-6xl font-bold uppercase tracking-tight leading-tight"
-                style={{
-                  WebkitTextStroke: '1px rgba(255,255,255,0.5)',
-                  WebkitTextFillColor: 'transparent'
-                }}
-              >
-                WHAT OUR <br /> CLIENTS SAY
+            <div className="relative z-10 w-full">
+              <span className="text-sm font-medium tracking-widest mb-2 block">TESTIMONIAL</span>
+              <div className="text-[120px] leading-none font-bold text-white/20 mb-8">"</div>
+              <h2 className="text-4xl md:text-5xl font-bold uppercase tracking-tight mb-4">
+                WHAT OUR <br />CLIENTS SAY
               </h2>
-             
             </div>
-            <div 
-              className="absolute inset-0 opacity-10"
-              style={{
-                backgroundImage: "url('/images/pattern.png')",
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat'
-              }}
-            />
           </div>
-           <div className="flex justify-center mb-8 space-x-6">
-              <button className="w-12 h-12 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors duration-200">
-                &larr;
-              </button>
-              <button className="w-12 h-12 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition-colors duration-200">
-                &rarr;
-              </button>
-            </div>
 
           {/* Right Testimonial Card */}
-          <div 
-            ref={cardRef}
-            className="w-full md:w-1/2 bg-white p-8 md:p-12 shadow-xl relative -mt-20 md:mt-20 md:-ml-20 z-10"
-            style={{
-              border: '2px solid #F40000',
-              boxShadow: '0 20px 50px rgba(0, 0, 0, 0.1)',
+          <div className="w-full lg:w-3/5 relative -mt-10 lg:mt-10 lg:-ml-20 z-10">
+            <div 
+              ref={cardRef}
+              className="bg-white p-8 md:p-12 relative border-2 border-[#F40000]"
+            >
+              <div className="absolute top-8 left-8 text-[#F40000] text-5xl font-bold">"</div>
               
-            }}
-          >
+              <div className="text-gray-700 text-lg leading-relaxed mb-8 pl-8 pt-4">
+                "Urban didn't just shoot a campaign they built an experience. Every frame carried our brand's soul. The response was beyond what we imagined"
+              </div>
+              
+              <div className="pt-6 border-t border-gray-200">
+                <h4 className="font-bold text-xl text-gray-900">SAMUEL T.</h4>
+                <p className="text-gray-600">Brand Manager, Safaricom Ethiopia</p>
+              </div>
 
-           
-            <div className="text-gray-600 text-lg leading-relaxed mb-8">
-              "Working with this team was a game-changer for our brand. Their creative approach and technical expertise are unmatched. The attention to detail and commitment to excellence is evident in every project they deliver."
+              <div className="absolute bottom-8 right-8 text-[#F40000] text-5xl font-bold transform rotate-180">"</div>
+              
+              <div className="flex justify-end mt-8 space-x-4">
+                <button className="w-10 h-10 rounded-full border-2 border-[#F40000] flex items-center justify-center text-[#F40000] hover:bg-[#F40000] hover:text-white transition-colors">
+                  &larr;
+                </button>
+                <button className="w-10 h-10 rounded-full bg-[#F40000] text-white flex items-center justify-center hover:bg-red-700 transition-colors">
+                  &rarr;
+                </button>
+              </div>
             </div>
-            
-            <div className="border-t border-gray-200 pt-6">
-              <h4 className="font-semibold text-xl text-gray-900">Emily Rodriguez</h4>
-              <p className="text-gray-500 text-sm mt-1">Founder, Creative Solutions</p>
-            </div>
-            
-            
           </div>
         </div>
       </div>

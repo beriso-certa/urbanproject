@@ -127,22 +127,23 @@ export default function Navbar({ data }: Props) {
       
       <div
         ref={navRef}
-        className="container mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between"
+        className="container mx-auto px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between"
       >
         {/* Logo with Link */}
-        <Link href="/" className="flex items-center gap-3 text-white text-2xl font-bold">
-          <Image
-            src={safeData.logo}
-            alt="Urban Logo"
-            width={40}
-            height={40}
-            priority
-          />
-          <span className="font-light">urban</span>
+        <Link href="/" className="flex items-center group">
+          <div className="relative w-32 h-10 md:w-40 md:h-12">
+            <Image
+              src="/images/logos.png"
+              alt="Urban Project Logo"
+              fill
+              className="object-contain object-left transition-opacity duration-300 group-hover:opacity-90"
+              priority
+            />
+          </div>
         </Link>
 
         {/* Navigation Menu */}
-        <nav className="hidden md:flex items-center space-x-1">
+        <nav className="hidden md:flex items-center space-x-3">
           {safeData.menu.map((item, index) => {
             const path = getPath(item);
             const active = isActive(item);
@@ -151,10 +152,16 @@ export default function Navbar({ data }: Props) {
               <Link
                 key={index}
                 href={path}
-                className={`px-4 py-2 text-sm font-medium uppercase tracking-wider transition-colors
+                className={`px-4 py-2 text-xs font-medium uppercase tracking-wider transition-all duration-300
                   ${active 
-                    ? 'bg-white text-black px-6' 
-                    : 'text-gray-300 hover:text-white'}`}
+                    ? 'bg-white text-black' 
+                    : 'text-white border border-white hover:bg-white hover:bg-opacity-10'}`}
+                style={{
+                  letterSpacing: '0.1em',
+                  lineHeight: '1.5',
+                  padding: '0.5rem 1.5rem',
+                  borderRadius: '0.125rem'
+                }}
               >
                 {item}
               </Link>
@@ -163,12 +170,21 @@ export default function Navbar({ data }: Props) {
         </nav>
 
         {/* Contact Button */}
-        <Link 
-          href="/contact"
-          className="hidden md:block bg-white text-black px-6 py-2 text-sm font-medium uppercase tracking-wider hover:bg-gray-100 transition-colors"
-        >
-          {safeData.cta}
-        </Link>
+        <div className="hidden md:block ml-6">
+          <Link 
+            href="/contact"
+            className="bg-white text-black px-6 py-2 text-xs font-medium uppercase tracking-wider hover:bg-gray-100 transition-colors"
+            style={{
+              letterSpacing: '0.1em',
+              lineHeight: '1.5',
+              padding: '0.5rem 1.5rem',
+              borderRadius: '0.125rem',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            {safeData.cta}
+          </Link>
+        </div>
 
         {/* Mobile menu button (hidden for now) */}
         <button className="md:hidden text-white">

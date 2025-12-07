@@ -107,76 +107,57 @@ export default function BlogPage() {
           </Link>
         </div>
 
-        <div className="w-[275px] h-[70px] mx-auto mb-4 opacity-100">
-          <h3 
-            className="text-center font-['Typograpghy'] text-[var(--color-Urban-Color-Urban-White)] font-extrabold uppercase leading-[110%]"
-            style={{
-              fontStyle: 'ExtraBold',
-              letterSpacing: '0%',
-              lineHeight: '110.00000000000001%',
-              textTransform: 'uppercase',
-              fontSize: 'var(--font-size-heading-h2)'
-            }}
-          >
+        <div className="max-w-4xl mx-auto text-center mb-16">
+          <h2 className="text-4xl md:text-6xl font-bold mb-4 uppercase">
             PLAY IT. FEEL IT.
-          </h3>
-        </div>
-        <div className="w-full max-w-[1280px] h-[54px] mx-auto mb-16 opacity-100 flex items-center justify-center">
-          <p 
-            className="font-['Typograpghy'] text-[var(--color-Urban-Color-Urban-Red,#F40000)] text-center leading-[150%]"
-            style={{
-              fontWeight: 400,
-              fontStyle: 'Regular',
-              fontSize: 'var(--font-size-body-large)',
-              letterSpacing: '0%',
-              lineHeight: '150%'
-            }}
-          >
-            Every frame, every story,<br />
-            every result.
+          </h2>
+          <p className="text-lg md:text-xl text-red-500">
+            Every frame, every story, every result.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {blogPosts.map((post, index) => (
             <div 
               key={post.id}
               ref={(el: HTMLDivElement | null) => {
                 if (el) cardsRef.current[index] = el;
               }}
-              className="group relative overflow-hidden rounded-lg bg-gray-900 hover:bg-gray-800 transition-colors duration-300"
+              className="group relative overflow-hidden rounded-lg bg-gray-900 transition-all duration-500 hover:shadow-2xl hover:shadow-red-500/20 flex flex-col"
             >
-              <div className="relative h-64">
-                <Image
-                  src={post.image}
-                  alt={post.title}
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              {/* Description at the top */}
+              <div className="p-6 pb-0 flex-1 flex flex-col">
+                <p className="text-gray-300 mb-4 line-clamp-3">{post.title}</p>
               </div>
               
-              <div className="p-6">
-                <span className="text-red-500 text-sm font-medium">{post.category}</span>
-                <h3 className="text-xl font-bold mt-2 mb-4">{post.title}</h3>
-                <p className="text-gray-400 mb-6">{post.description}</p>
-                
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">{post.date}</span>
-                  <div className="arrow-icon group-hover:translate-y-[-5px] transition-transform duration-300">
-                    <svg 
-                      className="w-6 h-6" 
-                      viewBox="0 0 24 24" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      strokeWidth="2" 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round"
-                    >
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                      <polyline points="12 5 19 12 12 19"></polyline>
-                    </svg>
-                  </div>
+              {/* Image in the middle */}
+              <div className="relative h-64 overflow-hidden">
+                <Image
+                  src={post.image}
+                  alt={post.description}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              </div>
+              
+              {/* Title and white arrow at the bottom */}
+              <div className="p-6 pt-4">
+                <h3 className="text-xl font-bold mb-4 line-clamp-2">{post.title}</h3>
+                <div className="flex justify-between items-center border-t border-gray-800 pt-4">
+                  <span className="text-white text-sm font-medium">Read More</span>
+                  <svg 
+                    className="w-5 h-5 text-white transform transition-transform group-hover:translate-x-1" 
+                    viewBox="0 0 20 20" 
+                    fill="currentColor"
+                  >
+                    <path 
+                      fillRule="evenodd" 
+                      d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" 
+                      clipRule="evenodd" 
+                    />
+                  </svg>
                 </div>
               </div>
             </div>

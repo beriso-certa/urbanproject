@@ -22,6 +22,7 @@ const Services = () => {
   const buttonRef = useRef<HTMLAnchorElement>(null);
   const itemsRef = useRef<(HTMLDivElement | null)[]>([]);
   const hoverDetailsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const hoverPanelsRef = useRef<HTMLDivElement[]>([]);
   const [hoveredId, setHoveredId] = useState<number | null>(null);
 
   const services: Service[] = [
@@ -159,30 +160,30 @@ const Services = () => {
   return (
     <section ref={sectionRef} className="py-24 px-4 bg-[#101820] w-full">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-8">
-          <div className="max-w-2xl">
-            <h2 
-              ref={titleRef}
-              className="text-4xl md:text-5xl font-bold text-white mb-4 uppercase"
-            >
-              OUR SERVICE
-            </h2>
-            <p 
-              ref={taglineRef}
-              className="text-lg text-gray-300"
-            >
-              We don't just produce we create stories that connect.
-            </p>
-          </div>
-          <a
-            ref={buttonRef}
-            href="#services"
-            className="flex items-center gap-2 px-6 py-3 bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition-colors duration-300"
-          >
-            SERVICES
-            <ArrowRight size={16} />
-          </a>
-        </div>
+        <div className="flex flex-col items-center text-center mb-16 gap-8">
+  <div className="max-w-2xl">
+    <h2 
+      ref={titleRef}
+      className="text-4xl md:text-5xl font-bold text-white mb-4 uppercase"
+    >
+      OUR SERVICE
+    </h2>
+    <p 
+      ref={taglineRef}
+      className="text-lg text-gray-300"
+    >
+      We don't just produce we create stories that connect.
+    </p>
+  </div>
+  <a
+    ref={buttonRef}
+    href="#services"
+    className="flex items-center justify-center gap-2 px-6 py-3 bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition-colors duration-300"
+  >
+    SERVICES
+    <ArrowRight size={16} />
+  </a>
+</div>
 
         <div className="space-y-8">
           {services.map((service, index) => (
@@ -205,26 +206,37 @@ const Services = () => {
                     {service.description}
                   </p>
                 </div>
-                <div className="ml-auto">
-                  <div className="w-8 h-8 rounded-full border border-white flex items-center justify-center text-white group-hover:bg-white group-hover:text-[#101820] transition-colors duration-300">
-                    <ArrowRight size={16} />
-                  </div>
-                </div>
+               <div className="ml-auto transform rotate-45 group-hover:rotate-90 transition-transform duration-300">
+  <div className="w-8 h-8 rounded-full border border-white flex items-center justify-center text-white group-hover:bg-white group-hover:text-[#101820] transition-colors duration-300">
+    <ArrowRight size={16} className="transform -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
+  </div>
+</div>
               </div>
 
               {/* Hover Details Panel */}
               <div
-                ref={el => { hoverDetailsRef.current[index] = el; }}
-                className="mt-8 pl-20 opacity-0 pointer-events-none"
+                ref={el => {
+                  if (el) {
+                    hoverDetailsRef.current[index] = el;
+                  } else {
+                    delete hoverDetailsRef.current[index];
+                  }
+                }}
+                className="absolute inset-0 bg-white p-8 opacity-0 -translate-x-4 -translate-y-4 pointer-events-none"
               >
-                <div className="bg-gradient-to-r from-red-600 to-white-700 rounded-lg p-8 text-white">
-                  <h4 className="text-2xl font-bold mb-4 uppercase">{service.title}</h4>
-                  <p className="text-base leading-relaxed">
+                <div className="h-full flex flex-col">
+                  <div className="text-red-600 text-2xl font-bold mb-4">
+                    {service.number}
+                  </div>
+                  <h4 className="text-xl font-bold text-gray-900 mb-4">
+                    {service.title}
+                  </h4>
+                  <p className="text-gray-700 flex-1">
                     {service.detailedDescription}
                   </p>
-                  <div className="mt-6 flex items-center gap-3">
-                    <span className="text-sm font-semibold">Learn More</span>
-                    <ArrowRight size={20} />
+                  <div className="mt-4 flex items-center text-red-600 font-medium">
+                    Learn more
+                    <ArrowRight className="ml-2" size={18} />
                   </div>
                 </div>
               </div>

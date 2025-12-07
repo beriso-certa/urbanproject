@@ -5,7 +5,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { UrbanBlock2D } from "./UrbanBlock2D";
+import UrbanBlock3D from "./UrbanBlock3D";
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -99,7 +99,7 @@ export const Hero = () => {
       <div className="w-full max-w-7xl mx-auto relative z-10">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
           <div className="w-full lg:w-1/2 flex flex-col items-center">
-            <UrbanBlock2D />
+            <UrbanBlock3D />
             <div 
               ref={buttonsRef}
               className="w-full flex flex-col sm:flex-row justify-center gap-4 mt-8"
