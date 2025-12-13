@@ -212,7 +212,16 @@ const BlogsSection = () => {
           <div className="w-full h-1 bg-black mb-8" />
           <h2 
             ref={titleRef}
-            className="text-5xl lg:text-7xl font-bold text-red-600 tracking-tight"
+            className="text-5xl lg:text-7xl font-bold text-red-600 tracking-tight 
+            font-family: Typograpghy/Heading/H1/font family;
+font-weight: 800;
+font-style: ExtraBold;
+font-size: Typograpghy/Heading/H1/font Size;
+leading-trim: NONE;
+line-height: 110.00000000000001%;
+letter-spacing: 0%;
+text-transform: uppercase;
+color/Urban Color/Urban Red"
           >
             BLOGS 
           </h2>

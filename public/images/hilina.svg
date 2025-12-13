@@ -1,0 +1,7 @@
+<svg width="296" height="360" viewBox="0 0 296 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="path-1-outside-1_5472_1204" maskUnits="userSpaceOnUse" x="0" y="0" width="296" height="360" fill="black">
+<rect fill="white" width="296" height="360"/>
+<path d="M32 32H264V296H32V32Z"/>
+</mask>
+<path d="M32 32V0H0V32H32ZM264 32H296V0H264V32ZM264 296V360H296V296H264ZM32 296H0V360H32V296ZM32 32V64H264V32V0H32V32ZM264 32H232V296H264H296V32H264ZM264 296V232H32V296V360H264V296ZM32 296H64V32H32H0V296H32Z" fill="#E5E5E5" mask="url(#path-1-outside-1_5472_1204)"/>
+</svg>

@@ -3,6 +3,7 @@
 
 import React from 'react';
 import { useEffect, useRef } from 'react';
+import Image from 'next/image';
 
 const Footer = () => {
   const footerRef = useRef<HTMLDivElement>(null);
@@ -86,14 +87,22 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-black text-white relative overflow-hidden">
+    <footer className="bg-[#000000] text-white relative overflow-hidden" style={{
+      display: 'flex',
+      height: '840px',
+      padding: '80px var(--Spacing-section-Horizontal-Margin, 80px) var(--Spacing-Section-Vertical-Margin, 120px) var(--Spacing-section-Horizontal-Margin, 80px)',
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+      gap: 'var(--Spacing-XLarge, 48px)',
+      alignSelf: 'stretch'
+    }}>
       {/* Main Footer Content */}
       <div 
         ref={footerRef}
-        className="relative z-10 opacity-0 transition-all duration-1000"
+        className="relative z-10 w-full h-full opacity-0 transition-all duration-1000"
         style={{ transform: 'translateY(30px)' }}
       >
-        <div className="max-w-7xl mx-auto px-4 py-16">
+        <div className="w-full h-full">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-12">
             {/* Contact Information */}
             <div className="space-y-4">
@@ -136,19 +145,21 @@ const Footer = () => {
             </div>
 
             {/* Brand & Tagline */}
-            <div className="lg:text-right">
-              <div className="mb-6">
-                <h2 className="text-5xl md:text-6xl font-bold mb-2">
-                  <span className="inline-block">🏢</span> urban
-                </h2>
+            <div className="w-full">
+              <div className="relative w-full h-20">
+                <Image 
+                  src="/images/footerlogo.svg" 
+                  alt="Urban Logo" 
+                  fill 
+                  className="object-contain object-left"
+                  sizes="(max-width: 800px) 100vw, 50vw"
+                  priority
+                />
               </div>
-              <p className="text-2xl md:text-3xl font-semibold leading-tight mb-6">
-                Crafting stories that<br />
-                move brands forward.
-              </p>
+              
               
               {/* Social Links */}
-              <div className="flex flex-wrap gap-3 justify-start lg:justify-end">
+              {/* <div className="flex flex-wrap gap-3 justify-start lg:justify-end">
                 {socialLinks.map((social, index) => (
                   <React.Fragment key={index}>
                     <a
@@ -162,7 +173,7 @@ const Footer = () => {
                     )}
                   </React.Fragment>
                 ))}
-              </div>
+              </div> */}
             </div>
           </div>
 

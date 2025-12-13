@@ -1,94 +1,162 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useRef, useEffect, useState } from 'react';
+import Image from 'next/image';
 
-gsap.registerPlugin(ScrollTrigger);
+interface Testimonial {
+  id: number;
+  name: string;
+  title: string;
+  company: string;
+  quote: string;
+}
 
 const Testimonials = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const leftPanelRef = useRef<HTMLDivElement>(null);
-  const cardRef = useRef<HTMLDivElement>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  useEffect(() => {
-    if (leftPanelRef.current && cardRef.current) {
-      // Animate left panel
-      gsap.from(leftPanelRef.current, {
-        x: -100,
-        opacity: 0,
-        duration: 1,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 80%',
-          toggleActions: 'play none none none',
-        },
-        ease: 'power3.out'
-      });
-
-      // Animate card with slight delay
-      gsap.from(cardRef.current, {
-        x: 100,
-        opacity: 0,
-        duration: 1,
-        delay: 0.3,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 80%',
-          toggleActions: 'play none none none',
-        },
-        ease: 'power3.out'
-      });
+  const testimonials: Testimonial[] = [
+    {
+      id: 1,
+      name: 'SAMUEL T.',
+      title: 'Brand Manager',
+      company: 'Safaricom Ethiopia',
+      quote: 'Urban didn\'t just shoot a campaign they built an experience. Every frame carried our brand\'s soul. The response was beyond what we imagined'
+    },
+    {
+      id: 2,
+      name: 'ELENA M.',
+      title: 'Creative Director',
+      company: 'TechVision Studios',
+      quote: 'Working with Urban transformed our vision into reality. Their storytelling approach brought depth and authenticity to every single frame we created together.'
+    },
+    {
+      id: 3,
+      name: 'DAVID K.',
+      title: 'CEO',
+      company: 'Global Brands Inc',
+      quote: 'The team at Urban understands that great content is more than just visuals. They capture emotions, tell stories, and create lasting impressions with every project.'
     }
-  }, []);
+  ];
+
+  const currentTestimonial = testimonials[currentIndex];
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+  };
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  };
 
   return (
-    <section ref={sectionRef} className="relative py-20 md:py-32 bg-white overflow-hidden">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col lg:flex-row">
-          {/* Left Red Panel */}
-          <div 
-            ref={leftPanelRef}
-            className="w-full lg:w-2/5 bg-[#F40000] text-white p-12 relative min-h-[500px] flex items-center"
+    <section
+      className="w-full bg-white"
+      style={{
+        width: '1440px',
+        height: '928px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '80px 40px'
+      }}
+    >
+      <div className="max-w-7xl w-full mx-auto">
+        <div className="grid grid-cols-2 gap-12 items-center h-full">
+          
+          {/* LEFT SIDE - Red Box with Pattern */}
+          <div
+            className="relative w-full h-full bg-gradient-to-br from-red-600 to-red-700 rounded-lg shadow-2xl overflow-hidden"
+            style={{ minHeight: '600px' }}
           >
-            <div className="relative z-10 w-full">
-              <span className="text-sm font-medium tracking-widest mb-2 block">TESTIMONIAL</span>
-              <div className="text-[120px] leading-none font-bold text-white/20 mb-8">"</div>
-              <h2 className="text-4xl md:text-5xl font-bold uppercase tracking-tight mb-4">
-                WHAT OUR <br />CLIENTS SAY
+            {/* Top Section with Title */}
+            <div className="relative z-10 p-12 h-1/3 flex flex-col justify-start">
+              <h2 className="text-white text-4xl font-bold uppercase tracking-widest">
+                TESTIMONIAL
               </h2>
             </div>
-          </div>
 
-          {/* Right Testimonial Card */}
-          <div className="w-full lg:w-3/5 relative -mt-10 lg:mt-10 lg:-ml-20 z-10">
-            <div 
-              ref={cardRef}
-              className="bg-white p-8 md:p-12 relative border-2 border-[#F40000]"
-            >
-              <div className="absolute top-8 left-8 text-[#F40000] text-5xl font-bold">"</div>
-              
-              <div className="text-gray-700 text-lg leading-relaxed mb-8 pl-8 pt-4">
-                "Urban didn't just shoot a campaign they built an experience. Every frame carried our brand's soul. The response was beyond what we imagined"
-              </div>
-              
-              <div className="pt-6 border-t border-gray-200">
-                <h4 className="font-bold text-xl text-gray-900">SAMUEL T.</h4>
-                <p className="text-gray-600">Brand Manager, Safaricom Ethiopia</p>
-              </div>
-
-              <div className="absolute bottom-8 right-8 text-[#F40000] text-5xl font-bold transform rotate-180">"</div>
-              
-              <div className="flex justify-end mt-8 space-x-4">
-                <button className="w-10 h-10 rounded-full border-2 border-[#F40000] flex items-center justify-center text-[#F40000] hover:bg-[#F40000] hover:text-white transition-colors">
-                  &larr;
-                </button>
-                <button className="w-10 h-10 rounded-full bg-[#F40000] text-white flex items-center justify-center hover:bg-red-700 transition-colors">
-                  &rarr;
-                </button>
+            {/* Center Section with Large Quote Mark */}
+            <div className="relative z-10 h-1/3 flex items-center justify-center">
+              <div className="opacity-30 w-48 h-48 relative">
+                <Image 
+                  src="/images/cotation.png" 
+                  alt="Quotation mark"
+                  fill
+                  className="object-contain"
+                />
               </div>
             </div>
+
+            {/* Bottom Section with Pattern and Text */}
+         <div className="relative z-10 h-1/3 flex flex-col justify-end pb-12">
+  {/* Geometric Pattern Background */}
+  <div className="absolute inset-0 bottom-0 w-full h-full">
+    <div className="relative w-full h-full">
+      <Image 
+        src="/images/Pattern .png" 
+        alt="Background pattern"
+        fill
+        className="object-cover opacity-20"
+      />
+    </div>
+  </div>
+
+  {/* Text on top of pattern */}
+  <div className="relative text-center z-20">
+    <h3 className="text-white text-3xl font-bold uppercase tracking-widest leading-tight">
+      WHAT OUR
+    </h3>
+    <h3 className="text-white text-3xl font-bold uppercase tracking-widest leading-tight">
+      CLIENTS SAY
+    </h3>
+  </div>
+</div>
+<div className="flex items-center"></div>
           </div>
+          
+
+          {/* RIGHT SIDE - Testimonial Cards with Overlap */}
+          {/* Main Testimonial Card */}
+<div className="relative flex-1 bg-white p-12 rounded-lg shadow-lg  -ml-14">
+  
+  
+  {/* Opening Quote */}
+  <div className="relative w-10 h-10 mb-6">
+    <Image 
+      src="/images/quote1.svg" 
+      alt="Opening quote"
+      width={40}
+      height={40}
+      className="text-red-600"
+    />
+  </div>
+
+  {/* Client Info */}
+  <div className="mb-8">
+    <h4 className="text-2xl font-bold text-gray-900 uppercase tracking-wide">
+      {currentTestimonial.name}
+    </h4>
+    <p className="text-gray-600 font-medium mt-2">
+      {currentTestimonial.title}, {currentTestimonial.company}
+    </p>
+  </div>
+
+  {/* Quote Text */}
+  <p className="text-gray-700 text-lg leading-relaxed mb-8 flex-1">
+    {currentTestimonial.quote}
+  </p>
+
+  {/* Closing Quote */}
+  <div className="relative w-10 h-10 ml-auto">
+    <Image 
+      src="/images/quote1.svg" 
+      alt="Closing quote"
+      width={40}
+      height={40}
+      className="text-red-600 rotate-180" /* Rotate the closing quote */
+    />
+  </div>
+</div>
         </div>
       </div>
     </section>

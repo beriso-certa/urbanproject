@@ -1,11 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight } from 'lucide-react';
-
-gsap.registerPlugin(ScrollTrigger);
 
 interface Service {
   id: number;
@@ -21,8 +17,7 @@ const Services = () => {
   const taglineRef = useRef<HTMLParagraphElement>(null);
   const buttonRef = useRef<HTMLAnchorElement>(null);
   const itemsRef = useRef<(HTMLDivElement | null)[]>([]);
-  const hoverDetailsRef = useRef<(HTMLDivElement | null)[]>([]);
-  const hoverPanelsRef = useRef<HTMLDivElement[]>([]);
+  const hoverPanelsRef = useRef<(HTMLDivElement | null)[]>([]);
   const [hoveredId, setHoveredId] = useState<number | null>(null);
 
   const services: Service[] = [
@@ -50,199 +45,227 @@ const Services = () => {
   ];
 
   useEffect(() => {
-    // Title animation
-    gsap.fromTo(
-      titleRef.current,
-      { y: 30, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 90%',
-          toggleActions: 'play none none none',
-        }
-      }
-    );
-
-    // Tagline animation
-    gsap.fromTo(
-      taglineRef.current,
-      { y: 20, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        delay: 0.2,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 85%',
-          toggleActions: 'play none none none',
-        }
-      }
-    );
-
-    // Button animation
-    gsap.fromTo(
-      buttonRef.current,
-      { x: -20, opacity: 0 },
-      {
-        x: 0,
-        opacity: 1,
-        duration: 0.8,
-        delay: 0.4,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 80%',
-          toggleActions: 'play none none none',
-        }
-      }
-    );
-
-    // Services items animation
-    itemsRef.current.forEach((item, index) => {
-      if (item) {
-        gsap.fromTo(
-          item,
-          { y: 30, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            delay: 0.6 + (index * 0.1),
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: 'top 70%',
-              toggleActions: 'play none none none',
-            }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('opacity-100', 'translate-y-0');
           }
-        );
-      }
-    });
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const elements = document.querySelectorAll('.fade-in');
+    elements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
   }, []);
 
   const handleMouseEnter = (index: number, id: number) => {
     setHoveredId(id);
-    const detailsEl = hoverDetailsRef.current[index];
+    const hoverPanel = hoverPanelsRef.current[index];
+    const serviceItem = itemsRef.current[index];
     
-    if (detailsEl) {
-      gsap.fromTo(
-        detailsEl,
-        { opacity: 0, y: 20 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.4,
-          ease: 'power2.out'
-        }
-      );
+    if (hoverPanel) {
+      hoverPanel.style.opacity = '1';
+      hoverPanel.style.pointerEvents = 'auto';
+      hoverPanel.style.maxHeight = '400px';
+      
+      const contentElements = hoverPanel.querySelectorAll('[data-hover-content]');
+      contentElements.forEach((el, i) => {
+        const element = el as HTMLElement;
+        element.style.opacity = '1';
+        element.style.transform = 'translateY(0)';
+      });
+    }
+
+    if (serviceItem) {
+      serviceItem.style.backgroundColor = 'rgba(220, 38, 38, 0.1)';
     }
   };
 
   const handleMouseLeave = (index: number) => {
     setHoveredId(null);
-    const detailsEl = hoverDetailsRef.current[index];
-    
-    if (detailsEl) {
-      gsap.to(
-        detailsEl,
-        {
-          opacity: 0,
-          y: 20,
-          duration: 0.3,
-          ease: 'power2.in'
-        }
-      );
+    const hoverPanel = hoverPanelsRef.current[index];
+    const serviceItem = itemsRef.current[index];
+
+    if (hoverPanel) {
+      hoverPanel.style.opacity = '0';
+      hoverPanel.style.pointerEvents = 'none';
+      hoverPanel.style.maxHeight = '0px';
+      
+      const contentElements = hoverPanel.querySelectorAll('[data-hover-content]');
+      contentElements.forEach((el) => {
+        const element = el as HTMLElement;
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(20px)';
+      });
+    }
+
+    if (serviceItem) {
+      serviceItem.style.backgroundColor = 'transparent';
     }
   };
 
   return (
-    <section ref={sectionRef} className="py-24 px-4 bg-[#101820] w-full">
+    <section 
+      ref={sectionRef}
+      className="w-full py-24 px-4 md:px-6 bg-[#101820]"
+      style={{
+        paddingTop: '96px',
+        paddingBottom: '96px',
+        gap: '48px'
+      }}
+    >
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col items-center text-center mb-16 gap-8">
-  <div className="max-w-2xl">
-    <h2 
-      ref={titleRef}
-      className="text-4xl md:text-5xl font-bold text-white mb-4 uppercase"
-    >
-      OUR SERVICE
-    </h2>
-    <p 
-      ref={taglineRef}
-      className="text-lg text-gray-300"
-    >
-      We don't just produce we create stories that connect.
-    </p>
-  </div>
-  <a
-    ref={buttonRef}
-    href="#services"
-    className="flex items-center justify-center gap-2 px-6 py-3 bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition-colors duration-300"
-  >
-    SERVICES
-    <ArrowRight size={16} />
-  </a>
-</div>
+        
+        {/* Header Section */}
+        <div className="flex flex-col items-center text-center mb-24 gap-8 fade-in opacity-0 translate-y-8 transition-all duration-1000">
+          <div className="max-w-3xl">
+            <h2 
+              ref={titleRef}
+              className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 uppercase tracking-wider"
+            >
+              OUR SERVICE
+            </h2>
+            <p 
+              ref={taglineRef}
+              className="text-lg md:text-xl text-gray-300 font-light"
+            >
+              We don't just produce we create stories that connect.
+            </p>
+          </div>
+          
+          <a
+            ref={buttonRef}
+            href="#services"
+            className="flex items-center justify-center gap-2 px-8 py-4 bg-red-600 text-white text-sm font-bold hover:bg-red-700 transition-all duration-300 uppercase tracking-wider"
+          >
+            SERVICES
+            <ArrowRight size={16} strokeWidth={3} />
+          </a>
+        </div>
 
-        <div className="space-y-8">
+        {/* Divider */}
+        <div className="h-px bg-gray-700 mb-12" />
+
+        {/* Services List */}
+        <div className="space-y-0">
           {services.map((service, index) => (
             <div
               key={service.id}
-              ref={el => { itemsRef.current[index] = el; }}
-              onMouseEnter={() => handleMouseEnter(index, service.id)}
-              onMouseLeave={() => handleMouseLeave(index)}
-              className="group relative py-8 border-b border-gray-800 last:border-0 cursor-pointer"
+              className="relative fade-in opacity-0 translate-y-8 transition-all duration-1000"
+              style={{
+                transitionDelay: `${200 + index * 100}ms`
+              }}
             >
-              <div className="flex flex-col md:flex-row gap-8 items-start">
-                <div className="w-12 h-12 rounded-full border-2 border-white flex items-center justify-center text-white text-lg font-bold flex-shrink-0 group-hover:bg-red-600 group-hover:border-red-600 transition-colors duration-300">
-                  {service.number}
+              {/* Main Service Item */}
+              <div
+                ref={el => { itemsRef.current[index] = el; }}
+                onMouseEnter={() => handleMouseEnter(index, service.id)}
+                onMouseLeave={() => handleMouseLeave(index)}
+                className="relative py-12 px-8 cursor-pointer group transition-all duration-300 border-b border-gray-700/50"
+              >
+                <div className="flex items-center justify-between gap-8">
+                  {/* Left - Number and Title */}
+                  <div className="flex items-center gap-8 flex-1">
+                    {/* Circular Number */}
+                    <div className="w-20 h-20 rounded-full border-2 border-gray-400 flex items-center justify-center text-white text-xl font-bold flex-shrink-0 group-hover:border-red-600 group-hover:text-red-600 transition-all duration-300">
+                      {service.number}
+                    </div>
+                    
+                    {/* Title */}
+                    <h3 className="text-3xl lg:text-4xl font-bold text-white uppercase tracking-wider group-hover:text-red-600 transition-colors duration-300 leading-tight">
+                      {service.title}
+                    </h3>
+                  </div>
+
+                  {/* Right - Arrow */}
+                  <div className="flex-shrink-0 transform group-hover:rotate-45 transition-transform duration-300">
+                    <ArrowRight size={32} className="text-gray-400 group-hover:text-red-600 transition-colors duration-300" strokeWidth={1.5} />
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-red-600 transition-colors duration-300">
-                    {service.title}
-                  </h3>
-                  <p className="text-gray-400">
-                    {service.description}
-                  </p>
-                </div>
-               <div className="ml-auto transform rotate-45 group-hover:rotate-90 transition-transform duration-300">
-  <div className="w-8 h-8 rounded-full border border-white flex items-center justify-center text-white group-hover:bg-white group-hover:text-[#101820] transition-colors duration-300">
-    <ArrowRight size={16} className="transform -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
-  </div>
-</div>
               </div>
 
               {/* Hover Details Panel */}
               <div
                 ref={el => {
                   if (el) {
-                    hoverDetailsRef.current[index] = el;
-                  } else {
-                    delete hoverDetailsRef.current[index];
+                    hoverPanelsRef.current[index] = el;
                   }
                 }}
-                className="absolute inset-0 bg-white p-8 opacity-0 -translate-x-4 -translate-y-4 pointer-events-none"
+                className="relative bg-white overflow-hidden transition-all duration-500"
+                style={{
+                  opacity: 0,
+                  pointerEvents: 'none',
+                  maxHeight: '0px'
+                }}
               >
-                <div className="h-full flex flex-col">
-                  <div className="text-red-600 text-2xl font-bold mb-4">
-                    {service.number}
-                  </div>
-                  <h4 className="text-xl font-bold text-gray-900 mb-4">
-                    {service.title}
-                  </h4>
-                  <p className="text-gray-700 flex-1">
-                    {service.detailedDescription}
-                  </p>
-                  <div className="mt-4 flex items-center text-red-600 font-medium">
-                    Learn more
-                    <ArrowRight className="ml-2" size={18} />
+                <div className="py-16 px-8">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl">
+                    {/* Number Column */}
+                    <div 
+                      data-hover-content
+                      style={{
+                        opacity: 0,
+                        transform: 'translateY(20px)',
+                        transition: 'opacity 0.4s ease, transform 0.4s ease'
+                      }}
+                    >
+                      <div className="text-red-600 text-6xl font-bold">
+                        {service.number}
+                      </div>
+                    </div>
+
+                    {/* Title and Description Column */}
+                    <div className="md:col-span-3">
+                      <h4 
+                        data-hover-content
+                        style={{
+                          opacity: 0,
+                          transform: 'translateY(20px)',
+                          transition: 'opacity 0.4s ease, transform 0.4s ease'
+                        }}
+                        className="text-4xl font-bold text-red-600 mb-6 uppercase tracking-wide"
+                      >
+                        {service.title}
+                      </h4>
+                      
+                      <p 
+                        data-hover-content
+                        style={{
+                          opacity: 0,
+                          transform: 'translateY(20px)',
+                          transition: 'opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s'
+                        }}
+                        className="text-lg text-gray-700 leading-relaxed mb-8 font-light"
+                      >
+                        {service.detailedDescription}
+                      </p>
+                      
+                      <div 
+                        data-hover-content
+                        style={{
+                          opacity: 0,
+                          transform: 'translateY(20px)',
+                          transition: 'opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s'
+                        }}
+                        className="flex items-center text-red-600 font-bold text-lg cursor-pointer group/link hover:translate-x-2 transition-transform duration-300"
+                      >
+                        Learn more
+                        <ArrowRight className="ml-3" size={24} strokeWidth={2.5} />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           ))}
         </div>
+
+        {/* Divider */}
+        <div className="h-px bg-gray-700 mt-0" />
       </div>
     </section>
   );

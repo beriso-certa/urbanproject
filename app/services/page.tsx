@@ -26,6 +26,8 @@ interface ServiceCategory {
 export default function ServicesPage() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
+  const cursorRef = useRef<HTMLDivElement>(null);
+  const cursorLabelRef = useRef<HTMLDivElement>(null);
 
   // ✅ MOCK DATA (replace with Sanity later)
   const servicesData: ServiceCategory[] = [
@@ -39,8 +41,8 @@ export default function ServicesPage() {
         { _id: '1-1', title: 'VIDEO PRODUCTION' },
         { _id: '1-2', title: 'PHOTOGRAPHY' },
         { _id: '1-3', title: 'EDITING & POST PRODUCTION' },
-        { _id: '1-4', title: 'SOCIAL MEDIA CONTENT' },
-      ],
+        { _id: '1-4', title: 'SOCIAL MEDIA CONTENT' }
+      ]
     },
     {
       _id: '2',
@@ -49,11 +51,14 @@ export default function ServicesPage() {
       description: 'From concept to execution with full creative control.',
       image: '/images/contentcreation02.png',
       services: [
-        { _id: '2-1', title: 'ART DIRECTION' },
-        { _id: '2-2', title: 'SET DESIGN & STYLING' },
-        { _id: '2-3', title: 'CASTING & TALENT COORDINATION' },
-        { _id: '2-4', title: 'VISUAL SUPERVISION' },
-      ],
+        { _id: '2-1', title: 'CONCEPT DEVELOPMENT' },
+        { _id: '2-2', title: 'CREATIVE DIRECTION' },
+        { _id: '2-3', title: 'PRODUCTION MANAGEMENT' },
+        { _id: '2-4', title: 'ART DIRECTION' },
+        { _id: '2-5', title: 'SET DESIGN & STYLING' },
+        { _id: '2-6', title: 'CASTING & TALENT COORDINATION' },
+        { _id: '2-7', title: 'VISUAL SUPERVISION' }
+      ]
     },
     {
       _id: '3',
@@ -62,63 +67,90 @@ export default function ServicesPage() {
       description: 'We build stories that connect brands with people.',
       image: '/images/contentcreation03.png',
       services: [
-        { _id: '3-1', title: 'BRAND MESSAGING' },
-        { _id: '3-2', title: 'CAMPAIGN STRATEGY' },
-        { _id: '3-3', title: 'SCRIPTWRITING' },
-        { _id: '3-4', title: 'STORYBOARDING' },
-      ],
-    },
+        { _id: '3-1', title: 'SOCIAL MEDIA MARKETING' },
+        { _id: '3-2', title: 'CONTENT STRATEGY' },
+        { _id: '3-3', title: 'BRAND STORYTELLING' },
+        { _id: '3-4', title: 'BRAND MESSAGING' },
+        { _id: '3-5', title: 'CAMPAIGN STRATEGY' },
+        { _id: '3-6', title: 'SCRIPTWRITING' },
+        { _id: '3-7', title: 'STORYBOARDING' }
+      ]
+    }
   ];
 
   // ✅ ANIMATIONS
   useEffect(() => {
-    gsap.fromTo(
-      titleRef.current,
-      { opacity: 0, y: 60 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        scrollTrigger: {
-          trigger: titleRef.current,
-          start: 'top 80%',
-        },
+    // Initialize animations
+    const ctx = gsap.context((self) => {
+      if (!self.selector) return;
+      
+      // Title animation
+      if (titleRef.current) {
+        gsap.fromTo(titleRef.current,
+          { opacity: 0, y: 60 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            scrollTrigger: {
+              trigger: titleRef.current,
+              start: 'top 80%',
+            },
+          }
+        );
       }
-    );
 
-    gsap.utils.toArray('.service-section').forEach((section: any, i) => {
-      gsap.fromTo(
-        section,
-        { opacity: 0, y: 80 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.9,
-          delay: i * 0.2,
-          scrollTrigger: {
-            trigger: section,
-            start: 'top 85%',
-          },
-        }
-      );
-    });
+      // Service sections animation
+      const sections = gsap.utils.toArray<HTMLElement>('.service-section');
+      sections.forEach((section, i) => {
+        gsap.fromTo(section,
+          { opacity: 0, y: 80 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            delay: i * 0.1,
+            scrollTrigger: {
+              trigger: section,
+              start: 'top 85%',
+            },
+          }
+        );
+      });
 
-    gsap.utils.toArray('.service-item').forEach((item: any) => {
-      gsap.fromTo(
-        item,
-        { opacity: 0, x: -30 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.4,
-          scrollTrigger: {
-            trigger: item,
-            start: 'top 90%',
-          },
-        }
-      );
-    });
+      // Cursor animation
+      if (cursorRef.current) {
+        const xTo = gsap.quickTo(cursorRef.current, 'x', { duration: 0.15, ease: 'power3' });
+        const yTo = gsap.quickTo(cursorRef.current, 'y', { duration: 0.15, ease: 'power3' });
+        
+        const handleMouseMove = (e: MouseEvent) => {
+          xTo(e.clientX);
+          yTo(e.clientY);
+        };
+
+        window.addEventListener('mousemove', handleMouseMove);
+        
+        return () => {
+          window.removeEventListener('mousemove', handleMouseMove);
+        };
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
   }, []);
+
+  // Cursor Hover Effects
+  const onMouseEnterCard = () => {
+    if(cursorLabelRef.current && cursorRef.current) {
+        gsap.to(cursorRef.current, { scale: 1, opacity: 1, duration: 0.3 });
+    }
+  };
+
+  const onMouseLeaveCard = () => {
+    if(cursorLabelRef.current && cursorRef.current) {
+        gsap.to(cursorRef.current, { scale: 0, opacity: 0, duration: 0.3 });
+    }
+  };
 
   return (
     <div ref={sectionRef} className="min-h-screen bg-[#0a0f1c] text-white">

@@ -3,170 +3,168 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import UrbanBlock3D from "./UrbanBlock3D";
 
-// Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
 export const Hero = () => {
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const taglineRef = useRef<HTMLDivElement>(null);
-  const buttonsRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+  const buttonsRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    // Initial animations
-    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+    const ctx = gsap.context(() => {
+      // ✅ 3D ENTRY ANIMATION
+      const intro = gsap.timeline({
+        defaults: { ease: "power4.out" },
+      });
 
-    tl.fromTo(
-      titleRef.current,
-      { y: 40, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1.2 }
-    )
-    .fromTo(
-      taglineRef.current,
-      { y: 20, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1 },
-      "-=0.7"
-    )
-    .fromTo(
-      buttonsRef.current?.children || [],
-      { y: 20, opacity: 0 },
-      { 
-        y: 0, 
-        opacity: 1, 
-        duration: 0.8,
-        stagger: 0.1,
-        ease: "back.out(1.7)"
-      },
-      "-=0.5"
-    );
+      intro
+        .set(sectionRef.current, { perspective: 1200 })
+        .fromTo(
+          imageRef.current,
+          { opacity: 0, rotateX: 15, y: 120 },
+          { opacity: 1, rotateX: 0, y: 0, duration: 1.2 }
+        )
+        .fromTo(
+          textRef.current,
+          { opacity: 0, rotateY: 15, x: -60 },
+          { opacity: 1, rotateY: 0, x: 0, duration: 1 },
+          "-=0.6"
+        )
+        .fromTo(
+          buttonsRef.current?.children,
+          { opacity: 0, y: 30 },
+          { opacity: 1, y: 0, stagger: 0.15, duration: 0.6 },
+          "-=0.4"
+        );
 
-    // Scroll-based animations
-    gsap.timeline({
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: "top top",
-        end: "bottom top",
-        scrub: 1,
-        pin: true,
-      }
-    })
-    .to(titleRef.current, { 
-      y: -100,
-      scale: 0.95,
-      opacity: 0.7
-    })
-    .to(taglineRef.current, {
-      y: -50,
-      opacity: 0.7
-    }, 0)
-    .to(buttonsRef.current, {
-      y: -30,
-      opacity: 0.8
-    }, 0);
+      // ✅ PINNED 3D SCROLL DEPTH EFFECT
+      const scrollTL = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: "+=120%",
+          scrub: 1,
+          pin: true,
+        },
+      });
 
-    // Parallax effect for video
-    if (videoRef.current) {
+      scrollTL
+        .to(imageRef.current, {
+          scale: 0.9,
+          rotateX: -8,
+          y: -140,
+        })
+        .to(
+          textRef.current,
+          {
+            y: -120,
+            opacity: 0.6,
+          },
+          0
+        )
+        .to(
+          buttonsRef.current,
+          {
+            y: -80,
+            opacity: 0.5,
+          },
+          0
+        );
+
+      // ✅ VIDEO FLOATING PARALLAX
       gsap.to(videoRef.current, {
-        y: 100,
+        y: 120,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top bottom",
           end: "bottom top",
-          scrub: true
-        }
+          scrub: true,
+        },
       });
-    }
+    });
 
-    // Cleanup
-    return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-    };
+    return () => ctx.revert();
   }, []);
 
   return (
-    <section 
+    <section
       ref={sectionRef}
-      className="min-h-screen flex items-center bg-black p-6 md:p-12 relative overflow-hidden"
+      className="relative min-h-screen bg-black flex flex-col justify-center px-6 md:px-12 overflow-hidden"
     >
-      {/* Background pattern */}
-      <div className="absolute inset-0 bg-grid-white/[0.03] bg-[size:20px_20px]"></div>
-      
-      <div className="w-full max-w-7xl mx-auto relative z-10">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-          <div className="w-full lg:w-1/2 flex flex-col items-center">
-            <UrbanBlock3D />
-            <div 
-              ref={buttonsRef}
-              className="w-full flex flex-col sm:flex-row justify-center gap-4 mt-8"
-            >
-              <Link 
-                href="/works"
-                className="group flex items-center justify-center gap-2 px-8 py-4 border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300 text-base font-medium tracking-wider"
-              >
-                SEE OUR WORK
-                <ArrowRight 
-                  size={18} 
-                  className="group-hover:translate-x-1 transition-transform duration-300" 
-                />
-              </Link>
-              <Link 
-                href="/contact"
-                className="group flex items-center justify-center gap-2 px-8 py-4 bg-white text-black hover:bg-gray-100 transition-all duration-300 text-base font-medium tracking-wider"
-              >
-                START A PROJECT
-                <ArrowRight 
-                  size={18} 
-                  className="group-hover:translate-x-1 transition-transform duration-300" 
-                />
-              </Link>
-            </div>
-          </div>
-          
-          <div className="w-full lg:w-1/2 flex flex-col">
-            <h1 
-              ref={titleRef}
-              className="text-8xl md:text-[180px] lg:text-[220px] xl:text-[260px] font-black text-red-600 leading-[0.8] tracking-tight mb-12 will-change-transform"
-            >
-              urban
-            </h1>
-            
-            <div 
-              ref={taglineRef}
-              className="max-w-2xl mb-16 will-change-transform"
-            >
-              <p className="text-white text-xl md:text-2xl leading-relaxed opacity-90 mb-4">
-                We create stories through content, strategy, and imagination work that makes people stop, feel, and remember.
-              </p>
-            </div>
-          </div>
-        </div>
+      {/* Background grid */}
+      <div className="absolute inset-0 bg-grid-white/[0.04] bg-[size:25px_25px]" />
 
-        {/* Video Section */}
-        <div className="mt-12 w-full will-change-transform">
-          <div className="relative w-full max-w-[1280px] mx-auto px-8 py-8">
-            <div className="relative w-full h-[506px] mx-auto overflow-hidden rounded-lg bg-black/20">
-              <video
-                ref={videoRef}
-                src="/images/hero.mp4"
-                autoPlay
-                muted
-                loop
-                playsInline
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-            </div>
+      <div className="relative z-10 max-w-7xl mx-auto w-full pt-32">
+        <div className="flex flex-col gap-12">
+          
+          {/* ✅ 3D IMAGE BLOCK */}
+          <div ref={imageRef} className="will-change-transform">
+            <Image
+              src="/images/herourban.png"
+              alt="Hero"
+              width={1280}
+              height={433}
+              className="w-full h-auto object-cover"
+              priority
+            />
+          </div>
+
+          {/* ✅ TEXT CONTENT */}
+         <div ref={textRef} className="max-w-2xl ml-auto">
+  <p className="text-white font-sans font-normal text-base leading-[150%] tracking-normal">
+    We create stories through content, strategy, and 
+    imagination work that makes people stop, feel, and remember.
+  </p>
+</div>
+
+          {/* ✅ CTA BUTTONS */}
+          <div
+            ref={buttonsRef}
+            className="flex flex-col sm:flex-row gap-4"
+          >
+            <Link
+              href="/works"
+              className="group flex items-center justify-center gap-2 px-8 py-4 border-2 border-white text-white hover:bg-white hover:text-black transition-all"
+            >
+              SEE OUR WORK
+              <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+
+            <Link
+              href="/contact"
+              className="group flex items-center justify-center gap-2 px-8 py-4 bg-white text-black hover:bg-gray-200 transition-all"
+            >
+              START A PROJECT
+              <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+            </Link>
           </div>
         </div>
       </div>
 
-      {/* Gradient overlay */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent z-10" />
+      {/* ✅ VIDEO PARALLAX */}
+      <div className="relative z-10 mt-24 max-w-6xl mx-auto w-full px-6">
+        <div className="relative w-full h-[520px] rounded-xl overflow-hidden bg-black/20">
+          <video
+            ref={videoRef}
+            src="/images/hero.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+        </div>
+      </div>
+
+      {/* Bottom fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black to-transparent z-20" />
     </section>
   );
 };
