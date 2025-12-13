@@ -4,8 +4,8 @@ import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Image from 'next/image';
-import Header from '@/app/components/Header';
-import Footer from '@/app/components/layout/Footer';
+import Header from '@/components/Header';
+import Footer from '@/components/layout/Footer';
 
 gsap.registerPlugin(ScrollTrigger);
 

@@ -2,8 +2,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import 'leaflet/dist/leaflet.css';
-import Header from '@/app/components/Header';
-import Footer from '../components/layout/Footer';
+import Header from '@/components/Header';
+import Footer from '@/components/layout/Footer';
 
 // Dynamically import Map components with SSR disabled
 const MapWithNoSSR = dynamic(

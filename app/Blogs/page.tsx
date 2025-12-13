@@ -2,8 +2,8 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
-import Header from '@/app/components/Header';
-import Footer from '../components/layout/Footer';
+import Header from '@/components/Header';
+import Footer from '@/components/layout/Footer';
 import { useRouter } from 'next/navigation';
 
 
