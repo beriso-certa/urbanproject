@@ -14,7 +14,7 @@ interface Props {
   };
 }
 
-export default function Navbar({ data }: Props) {
+export default function Header({ data }: Props) {
   const navRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const [hash, setHash] = useState<string>("");

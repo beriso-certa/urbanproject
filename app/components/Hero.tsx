@@ -36,12 +36,15 @@ export const Hero = () => {
           { opacity: 1, rotateY: 0, x: 0, duration: 1 },
           "-=0.6"
         )
-        .fromTo(
-          buttonsRef.current?.children,
+      // Only add the buttons animation if buttonsRef.current exists
+      if (buttonsRef.current) {
+        intro.fromTo(
+          buttonsRef.current.children,
           { opacity: 0, y: 30 },
           { opacity: 1, y: 0, stagger: 0.15, duration: 0.6 },
           "-=0.4"
         );
+      }
 
       // ✅ PINNED 3D SCROLL DEPTH EFFECT
       const scrollTL = gsap.timeline({

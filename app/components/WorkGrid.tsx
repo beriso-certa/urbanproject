@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
-interface WorkItem {
+export interface WorkItem {
   _id: string;
   title: string;
   slug: string;

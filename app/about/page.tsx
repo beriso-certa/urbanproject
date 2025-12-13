@@ -2,9 +2,10 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import Footer from '@/app/components/layout/Footer';
-import Header from '@/app/components/Header';
+import Footer from '../components/Footer';
+import Header from '../components/Header';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+
 
 interface TeamMember {
   name: string;
@@ -46,14 +47,15 @@ const AboutPage = () => {
   const handleSwipe = () => {
     const swipeThreshold = 50;
     const difference = touchStartX.current - touchEndX.current;
+    const images = sanityData.culture.images;
 
     if (Math.abs(difference) > swipeThreshold) {
       if (difference > 0) {
         // Swiped left - show next image
-        setCurrentImageIndex((prev) => (prev + 1) % member.images.length);
+        setCurrentImageIndex((prev) => (prev + 1) % images.length);
       } else {
         // Swiped right - show previous image
-        setCurrentImageIndex((prev) => (prev - 1 + member.images.length) % member.images.length);
+        setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
       }
     }
   };
@@ -113,7 +115,7 @@ const AboutPage = () => {
 
   return (
     <div className="bg-[#1a1f2e] text-white min-h-screen">
-    <Header />
+    <Header data={defaultHeaderData} />
       {/* Hero Section */}
       <section 
         ref={heroRef}

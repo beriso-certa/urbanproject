@@ -188,11 +188,13 @@ const WhyUrban = () => {
     gsap.fromTo(titleEl, { x: -50, opacity: 0 }, 
       { x: 0, opacity: 1, duration: 0.8, ease: "power3.out" });
 
-    gsap.fromTo(
-      buttonsEl?.querySelectorAll('button'),
-      { x: 50, opacity: 0 },
-      { x: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: "power3.out", delay: 0.2 }
-    );
+    const buttons = buttonsEl?.querySelectorAll('button');
+    if (buttons && buttons.length > 0) {
+      gsap.fromTo(buttons as NodeListOf<HTMLButtonElement>,
+        { x: 50, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: "power3.out", delay: 0.2 }
+      );
+    }
 
     gsap.fromTo(taglineEl, { y: 20, opacity: 0 }, 
       { y: 0, opacity: 1, duration: 0.8, ease: "power3.out", delay: 0.3 });

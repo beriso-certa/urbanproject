@@ -3,8 +3,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Camera, ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import Header from '@/app/components/Header';
-import Footer from '@/app/components/layout/Footer';
+import Header from '../../../../../app/components/Header';
+import Footer from '../../../../../app/components/layout/Footer';
 
 interface WorkDetailPageProps {
   params: {

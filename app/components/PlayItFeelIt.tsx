@@ -93,7 +93,7 @@ const PlayItFeelIt = () => {
           {blogPosts.map((post, index) => (
             <div 
               key={post.id}
-              ref={el => cardsRef.current[index] = el}
+            ref={el => { cardsRef.current[index] = el; }}
               className="group relative overflow-hidden rounded-lg bg-gray-900 transition-all duration-500 hover:shadow-2xl hover:shadow-red-500/20"
             >
               <div className="relative h-64 overflow-hidden">

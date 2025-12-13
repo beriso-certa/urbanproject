@@ -19,8 +19,10 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"],
-      "@/sanity/*": ["./sanity/*"]
+      "@/*": ["./app/*"],
+      "@/components/*": ["./app/components/*"],
+      "@/sanity/*": ["./sanity/*"],
+      "@/lib/*": ["./lib/*"]
     }
   },
   "include": [

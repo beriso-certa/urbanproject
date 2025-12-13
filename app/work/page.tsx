@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
-import Header from '@/app/components/Header';
-import Footer from '@/app/components/layout/Footer';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 interface HeroCardProps {
   image: string;
@@ -119,7 +119,11 @@ export default function WorksPage() {
   return (
     <div className="min-h-screen bg-[#101820]">
       {/* Header */}
-     <Header />
+      <Header data={{
+        logo: '/images/logos.png',
+        menu: ['HOME', 'WORK', 'SERVICES', 'ABOUT US', 'BLOGS'],
+        cta: 'CONTACT US'
+      }} />
 
       {/* Hero Section */}
       <div

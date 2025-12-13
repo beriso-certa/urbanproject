@@ -3,8 +3,9 @@ import { Camera } from 'lucide-react';
 
 const SafaricomCampaign = () => {
   const heroRef = useRef(null);
-  const sectionsRef = useRef([]);
-  const statsRef = useRef([]);
+const sectionsRef = useRef<(HTMLElement | null)[]>([]);
+ 
+  const statsRef = useRef<(HTMLDivElement | null)[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -247,7 +248,7 @@ const SafaricomCampaign = () => {
       {campaignData.sections.map((section, index) => (
         <section 
           key={section.id}
-          ref={(el) => (sectionsRef.current[index] = el)}
+         ref={el => { sectionsRef.current[index] = el }}
           className="py-20 px-6 opacity-0"
         >
           <div className="max-w-7xl mx-auto">
@@ -280,7 +281,7 @@ const SafaricomCampaign = () => {
 
       {/* Impact Section */}
       <section 
-        ref={(el) => (sectionsRef.current[3] = el)}
+        ref={el => { sectionsRef.current[3] = el; }}
         className="py-20 px-6 opacity-0"
       >
         <div className="max-w-7xl mx-auto">
@@ -304,7 +305,11 @@ const SafaricomCampaign = () => {
                 {campaignData.impact.stats.map((stat, index) => (
                   <div 
                     key={index}
-                    ref={(el) => (statsRef.current[index] = el)}
+                  ref={el => {
+  if (el) {
+    statsRef.current[index] = el;
+  }
+}}
                     className="space-y-2 opacity-0"
                   >
                     <p className="text-3xl md:text-4xl font-bold text-red-500">
